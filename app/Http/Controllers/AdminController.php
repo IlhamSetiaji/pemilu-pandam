@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    public function generate_password()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        $microtime = $sec . $usec;
+        $microtime = str_replace(array(',', '.'), array('', ''), $microtime);
+        $microtime = substr_replace($microtime, rand(10000, 99999), -2);
+        $password = substr($microtime, 0, 15) . Str::random(5);
+        return $password;
+    }
+
     public function index()
     {
         return view('admin.admin');
@@ -21,18 +31,17 @@ class AdminController extends Controller
     public function showAllPemilu()
     {
         $pemilu = Pemilu::all();
-        return view('admin.pemilu',compact('pemilu'));
+        return view('admin.pemilu', compact('pemilu'));
     }
 
     public function storePemilu()
     {
-        $validator = Validator::make(request()->all(),[
+        $validator = Validator::make(request()->all(), [
             'name' => 'required|string|unique:pemilu,name',
             'start_date' => 'required|date_format:Y-m-d H:i|after_or_equal:today',
             'end_date' => 'required|date_format:Y-m-d H:i|after:start_date',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return redirect('admin/pemilu')->withInput()->withErrors($validator);
         }
         Pemilu::create([
@@ -40,23 +49,21 @@ class AdminController extends Controller
             'start_date' => request('start_date'),
             'end_date' => request('end_date'),
         ]);
-        return redirect('admin/pemilu')->with('status','Data pemilu berhasil ditambahkan');
+        return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil ditambahkan');
     }
 
     public function updatePemilu($pemiluID)
     {
         $pemilu = Pemilu::find($pemiluID);
-        if(!$pemilu)
-        {
-            return redirect('admin/pemilu')->with('status','Data pemilu tidak ditemukan');
+        if (!$pemilu) {
+            return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
         }
-        $validator = Validator::make(request()->all(),[
-            'name' => 'required|string|unique:pemilu,name,'.$pemilu->id,
-            'start_date' => 'required|date_format:Y-m-d H:i|after_or_equal:'.$pemilu->start_date,
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required|string|unique:pemilu,name,' . $pemilu->id,
+            'start_date' => 'required|date_format:Y-m-d H:i|after_or_equal:' . $pemilu->start_date,
             'end_date' => 'required|date_format:Y-m-d H:i|after:start_date',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return redirect('admin/pemilu')->withInput()->withErrors($validator);
         }
         $pemilu->update([
@@ -64,41 +71,39 @@ class AdminController extends Controller
             'start_date' => request('start_date'),
             'end_date' => request('end_date'),
         ]);
-        return redirect('admin/pemilu')->with('status','Data pemilu berhasil diupdate');
+        return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil diupdate');
     }
 
     public function updateStatusPemilu($pemiluID)
     {
         $pemilu = Pemilu::find($pemiluID);
-        if(!$pemilu)
-        {
-            return redirect('admin/pemilu')->with('status','Data pemilu tidak ditemukan');
+        if (!$pemilu) {
+            return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
         }
         $pemilu->status == 'ACTIVE' ? $pemilu->update(['status' => 'INACTIVE']) : $pemilu->update(['status' => 'ACTIVE']);
-        return redirect('admin/pemilu')->with('status','Status pemilu berhasil diupdate');
+        return redirect('admin/pemilu')->with('status', 'Status pemilu berhasil diupdate');
     }
 
     public function deletePemilu($pemiluID)
     {
         $pemilu = Pemilu::find($pemiluID);
-        if(!$pemilu)
-        {
-            return redirect('admin/pemilu')->with('status','Data pemilu tidak ditemukan');
+        if (!$pemilu) {
+            return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
         }
         Pemilu::destroy($pemiluID);
-        return redirect('admin/pemilu')->with('status','Data pemilu berhasil dihapus');
+        return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil dihapus');
     }
 
     public function showAllKetua()
     {
-        $pemilu = Pemilu::where('status','ACTIVE')->get();
+        $pemilu = Pemilu::where('status', 'ACTIVE')->get();
         $osis = Osis::all();
-        return view('admin.calon',compact('osis','pemilu'));
+        return view('admin.calon', compact('osis', 'pemilu'));
     }
 
     public function storeKetua()
     {
-        $validator = Validator::make(request()->all(),[
+        $validator = Validator::make(request()->all(), [
             'name' => 'required|string',
             'kelas' => 'required|string',
             'pemilu_id' => 'required',
@@ -106,15 +111,13 @@ class AdminController extends Controller
             'misi' => 'required|string',
             'photo' => 'required|max:10240|mimes:png,jpg,jpeg',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return redirect('admin/calon')->withInput()->withErrors($validator);
         }
         $pemilu = Pemilu::find(request('pemilu_id'));
-        if(request()->hasFile('photo'))
-        {
-            $photo = time()."_".request()->photo->getClientOriginalName();
-            request()->photo->move(public_path('data_calon/'.$pemilu->name.'/'.request('name').'/photo'), $photo); 
+        if (request()->hasFile('photo')) {
+            $photo = time() . "_" . request()->photo->getClientOriginalName();
+            request()->photo->move(public_path('data_calon/' . $pemilu->name . '/' . request('name') . '/photo'), $photo);
         }
         Osis::create([
             'name' => request('name'),
@@ -124,13 +127,13 @@ class AdminController extends Controller
             'misi' => request('misi'),
             'photo' => $photo,
         ]);
-        return redirect('admin/calon')->with('status','Data calon ketua berhasil ditambahkan');
+        return redirect('admin/calon')->with('status', 'Data calon ketua berhasil ditambahkan');
     }
 
     public function updateKetua($osisID)
     {
         $osis = Osis::find($osisID);
-        $validator = Validator::make(request()->all(),[
+        $validator = Validator::make(request()->all(), [
             'name' => 'required|string',
             'kelas' => 'required|string',
             'pemilu_id' => 'required',
@@ -138,16 +141,14 @@ class AdminController extends Controller
             'misi' => 'required|string',
             'photo' => 'required|max:10240|mimes:png,jpg,jpeg',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return redirect('admin/calon')->withInput()->withErrors($validator);
         }
         $pemilu = Pemilu::find(request('pemilu_id'));
-        if(request()->hasFile('photo'))
-        {
-            $photo = time()."_".request()->photo->getClientOriginalName();
-            request()->photo->move(public_path('data_calon/'.$pemilu->name.'/'.request('name').'/photo'), $photo); 
-            File::delete('data_calon/'.$osis->pemilu->name.'/'.$osis->name.'/photo/'.$osis->photo);
+        if (request()->hasFile('photo')) {
+            $photo = time() . "_" . request()->photo->getClientOriginalName();
+            request()->photo->move(public_path('data_calon/' . $pemilu->name . '/' . request('name') . '/photo'), $photo);
+            File::delete('data_calon/' . $osis->pemilu->name . '/' . $osis->name . '/photo/' . $osis->photo);
         }
         $osis->update([
             'name' => request('name'),
@@ -157,78 +158,71 @@ class AdminController extends Controller
             'misi' => request('misi'),
             'photo' => $photo,
         ]);
-        return redirect('admin/calon')->with('status','Data calon ketua berhasil diupdate');
+        return redirect('admin/calon')->with('status', 'Data calon ketua berhasil diupdate');
     }
 
     public function deleteKetua($osisID)
     {
-        $osis= Osis::find($osisID);
-        if(!$osis)
-        {
-            return redirect('admin/calon')->with('status','Data ketua tidak ditemukan');
+        $osis = Osis::find($osisID);
+        if (!$osis) {
+            return redirect('admin/calon')->with('status', 'Data ketua tidak ditemukan');
         }
-        File::delete('data_calon/'.$osis->pemilu->name.'/'.$osis->name.'/photo/'.$osis->photo);
+        File::delete('data_calon/' . $osis->pemilu->name . '/' . $osis->name . '/photo/' . $osis->photo);
         Osis::destroy($osisID);
-        return redirect('admin/calon')->with('status','Data calon ketua berhasil dihapus');
+        return redirect('admin/calon')->with('status', 'Data calon ketua berhasil dihapus');
     }
 
     public function showPemilih($pemiluID)
     {
-        $pemilih = User::where('pemilu_id',$pemiluID)->whereHas('roles', function ($query) {
+        $pemilih = User::where('pemilu_id', $pemiluID)->whereHas('roles', function ($query) {
             $query->where('name', '=', 'pemilih');
         })->get();
-        return view('admin.pemilih',compact('pemilih','pemiluID'));
+        return view('admin.pemilih', compact('pemilih', 'pemiluID'));
     }
 
     public function storePemilih($pemiluID)
     {
-        $validator = Validator::make(request()->all(),[
+        $validator = Validator::make(request()->all(), [
             'jumlah' => 'required',
         ]);
-        if($validator->fails())
-        {
-            return redirect('admin/'.$pemiluID.'/pemilih')->withInput()->withErrors($validator);
+        if ($validator->fails()) {
+            return redirect('admin/' . $pemiluID . '/pemilih')->withInput()->withErrors($validator);
         }
-        for($i = 0 ; $i < request('jumlah') ; $i++)
-        {
+        for ($i = 0; $i < request('jumlah'); $i++) {
             $user = User::create([
                 'pemilu_id' => $pemiluID,
-                'password' => Str::random(8),
+                'password' => $this->generate_password(),
             ]);
             $user->assignRole('pemilih');
         }
-        return redirect('admin/'.$pemiluID.'/pemilih')->with('status','Data pemilih berhasil dibuat');
+        return redirect('admin/' . $pemiluID . '/pemilih')->with('status', 'Data pemilih berhasil dibuat');
     }
 
-    public function deletePemilih($pemiluID,$pemilihID)
+    public function deletePemilih($pemiluID, $pemilihID)
     {
         $pemilu = Pemilu::find($pemiluID);
-        if(!$pemilu)
-        {
-            return redirect('admin/'.$pemiluID.'/pemilih')->with('status','Data pemilu tidak ditemukan');
+        if (!$pemilu) {
+            return redirect('admin/' . $pemiluID . '/pemilih')->with('status', 'Data pemilu tidak ditemukan');
         }
         $user = User::find($pemilihID);
-        if(!$user)
-        {
-            return redirect('admin/'.$pemiluID.'/pemilih')->with('status','Data pemilih tidak ditemukan');
+        if (!$user) {
+            return redirect('admin/' . $pemiluID . '/pemilih')->with('status', 'Data pemilih tidak ditemukan');
         }
         User::destroy($pemilihID);
-        return redirect('admin/'.$pemiluID.'/pemilih')->with('status','Data pemilih berhasil dihapus');
+        return redirect('admin/' . $pemiluID . '/pemilih')->with('status', 'Data pemilih berhasil dihapus');
     }
 
     public function hasilPemilu($pemiluID)
     {
         $pemilu = Pemilu::find($pemiluID);
-        if(!$pemilu)
-        {
-            return redirect('admin/pemilu')->with('status','Data pemilu tidak ditemukan');
+        if (!$pemilu) {
+            return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
         }
-        $users = Osis::where('pemilu_id',$pemiluID)->get();
+        $users = Osis::where('pemilu_id', $pemiluID)->get();
         $jumlah = array();
-        foreach($users as $u)
-        {
+        foreach ($users as $u) {
             $jumlah[] = $u->pemilih_osis()->count();
         }
-        return view('admin.hasil',compact('users','jumlah'));
+        return view('admin.hasil', compact('users', 'jumlah'));
     }
 }

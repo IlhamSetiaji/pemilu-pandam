@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
         collect([
             [
                 'name' => 'Admin',
+                'username' => 'admin',
                 'password' => 'password',
             ],
             // [
@@ -26,7 +27,7 @@ class UserSeeder extends Seeder
             //     'password' => 'password',
             //     'pemilu_id' => 1,
             // ],
-        ])->each(function($users){
+        ])->each(function ($users) {
             $user = \App\Models\User::create($users);
             $user->id == 1 ? $user->assignRole('admin') : '';
             // $user->id == 2 ? $user->assignRole('pemilih') : '';

@@ -48,21 +48,24 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        static::created(function($model) {
-            $model->name .= 'NAMA-' . str_pad($model->id, 5, 0, STR_PAD_LEFT);
-            $model->username .= 'USER-' . str_pad($model->id, 5, 0, STR_PAD_LEFT);
+        static::created(function ($model) {
+            if ($model->name == null) {
+                $model->name .= 'NAMA-' . str_pad($model->id, 5, 0, STR_PAD_LEFT);
+            }
+            if ($model->username == null) {
+                $model->username .= 'USER-' . str_pad($model->id, 5, 0, STR_PAD_LEFT);
+            }
             $model->save();
         });
     }
 
     public function pemilu()
     {
-        return $this->belongsTo(Pemilu::class,'pemilu_id');
+        return $this->belongsTo(Pemilu::class, 'pemilu_id');
     }
 
     public function pemilih_osis()
     {
-        return $this->belongsToMany(User::class,'pemilih_osis','user_id','osis_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'pemilih_osis', 'user_id', 'osis_id')->withTimestamps();
     }
-
 }
