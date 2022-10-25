@@ -23,7 +23,7 @@
                         </div>
                         <div class="form-group">
                             <label for="description" class="form-label">Start Date</label>
-                            <input type="text" class="form-control datetimepicker" name="start_date"
+                            <input type="datetime-local" class="form-control" name="start_date"
                                 value="{{ $p->start_date }}">
                             @if ($errors->has('start_date'))
                                 <span class="help-block">{{ $errors->first('start_date') }}</span>
@@ -31,7 +31,7 @@
                         </div>
                         <div class="form-group">
                             <label for="description" class="form-label">End Date</label>
-                            <input type="text" class="form-control datetimepicker" name="end_date"
+                            <input type="datetime-local" class="form-control" name="end_date"
                                 value="{{ $p->end_date }}">
                             @if ($errors->has('end_date'))
                                 <span class="help-block">{{ $errors->first('end_date') }}</span>

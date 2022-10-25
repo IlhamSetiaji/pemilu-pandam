@@ -82,8 +82,8 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <a href="{{ url('admin/'.$p->id.'/hasil') }}" class="btn btn-outline-success">Hasil</a>
-                                                    <a href="{{ url('admin/'.$p->id.'/pemilih') }}" class="btn btn-success">Lihat Pemilih</a>
+                                                    {{-- <a href="{{ url('admin/'.$p->id.'/hasil') }}" class="btn btn-outline-success">Hasil</a>
+                                                    <a href="{{ url('admin/'.$p->id.'/pemilih') }}" class="btn btn-success">Lihat Pemilih</a> --}}
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#modalUpdateStatus{{ $p->id }}">
                                                         <button type="button" class="btn btn-info">Ubah Status</button>
