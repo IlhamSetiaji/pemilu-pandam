@@ -34,6 +34,13 @@ class AdminController extends Controller
         return $password;
     }
 
+    public function generateUuid()
+    {
+        $uuid = Str::uuid()->toString();
+        $pass = str_replace('-', '', $uuid);
+        return $pass;
+    }
+
     public function index()
     {
         return view('admin.admin');
@@ -172,7 +179,7 @@ class AdminController extends Controller
         for ($i = 0; $i < request('jumlah'); $i++) {
             $user = User::create([
                 'pemilu_id' => $pemiluID,
-                'password' => $this->generate_password(),
+                'password' => $this->generateUuid(),
             ]);
             $user->assignRole('pemilih');
         }
