@@ -7,6 +7,8 @@ use App\Http\Requests\PemiluRequest;
 use App\Models\Osis;
 use App\Models\User;
 use App\Models\Pemilu;
+use App\Repositories\PemiluRepositories;
+use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -15,6 +17,13 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    protected $pemiluRepositories;
+
+    public function __construct(PemiluRepositories $pemiluRepositories)
+    {
+        $this->pemiluRepositories = $pemiluRepositories;
+    }
+
     public function generate_password()
     {
         list($usec, $sec) = explode(" ", microtime());
@@ -39,46 +48,61 @@ class AdminController extends Controller
 
     public function showAllPemilu()
     {
-        $pemilu = Pemilu::all();
+        $pemilu = $this->pemiluRepositories->getAllData();
         return view('admin.pemilu', compact('pemilu'));
     }
 
     public function storePemilu(PemiluRequest $request)
     {
         $payload = $request->validated();
-        Pemilu::create($payload);
+        $this->pemiluRepositories->create($payload);
         return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil ditambahkan');
     }
 
     public function updatePemilu(PemiluRequest $request, $pemiluID)
     {
-        $pemilu = Pemilu::find($pemiluID);
-        if (!$pemilu) {
-            return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
+        try{
+            $payload = $request->validated();
+            $update = $this->pemiluRepositories->update($payload, $pemiluID);
+            if(!$update){
+                return redirect('admin/pemilu')->withErrors("Tidak Dapat Update Pengguna Sudah Memilih");
+            }
+            return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil diupdate');
+        }catch(Exception $e){
+            return redirect()->back()->withErrors($e->getMessage());
         }
-        $payload = $request->validated();
-        $pemilu->update($payload);
-        return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil diupdate');
     }
 
-    public function updateStatusPemilu($pemiluID)
+    public function updateStatusPemilu(Request $request, $pemiluID)
     {
-        $pemilu = Pemilu::find($pemiluID);
-        if (!$pemilu) {
-            return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
+        try{
+            $update = $this->pemiluRepositories->statusAndDelete($pemiluID, $request->_method);
+            if(!$update){
+                return redirect()->back()->withErrors('Tidak Dapat Update Pengguna Sudah Memilih');
+            }
+            return redirect('admin/pemilu')->with('status', 'Status pemilu berhasil diupdate');
+        }catch(Exception $e){
+            return redirect()->back()->withErrors($e->getMessage());
         }
-        $pemilu->status == 'ACTIVE' ? $pemilu->update(['status' => 'INACTIVE']) : $pemilu->update(['status' => 'ACTIVE']);
-        return redirect('admin/pemilu')->with('status', 'Status pemilu berhasil diupdate');
     }
 
-    public function deletePemilu($pemiluID)
+    public function deletePemilu(Request $request,$pemiluID)
     {
-        $pemilu = Pemilu::find($pemiluID);
-        if (!$pemilu) {
-            return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
+        try{
+            $delete = $this->pemiluRepositories->statusAndDelete($pemiluID, $request->_method);
+            if(!$delete){
+                return redirect()->back()->withErrors('Tidak Dapat Update Pengguna Sudah Memilih');
+            }
+            return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil dihapus');
+        }catch(Exception $e){
+            return redirect()->back()->withErrors($e->getMessage());
         }
-        Pemilu::destroy($pemiluID);
-        return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil dihapus');
+        // $pemilu = Pemilu::find($pemiluID);
+        // if (!$pemilu) {
+        //     return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
+        // }
+        // Pemilu::destroy($pemiluID);
+        // return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil dihapus');
     }
 
     public function showAllKetua()

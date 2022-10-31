@@ -26,20 +26,19 @@ class PemiluRequest extends FormRequest
     {
         $method = request('method') ?? $this->method();
         $id = request('pemiluID');
-        $pemilu = Pemilu::find($id);
         switch ($method) {
             case 'PUT':
                 return [
                     'name' => 'required|string|unique:pemilu,name,' . $id,
-                    'start_date' => 'required|date_format:Y-m-d H:i|after_or_equal:' . $pemilu->start_date,
-                    'end_date' => 'required|date_format:Y-m-d H:i|after:start_date',
+                    'start_date' => 'required|date',
+                    'end_date' => 'required|date|after:start_date',
                 ];
                 break;
             case 'POST':
                 return [
                     'name' => 'required|string|unique:pemilu,name',
-                    'start_date' => 'required|date_format:Y-m-d H:i|after_or_equal:today',
-                    'end_date' => 'required|date_format:Y-m-d H:i|after:start_date',
+                    'start_date' => 'required|date|after_or_equal:today',
+                    'end_date' => 'required|date|after:start_date',
                 ];
                 break;
             default:

@@ -13,9 +13,11 @@
                     <p>Apakah anda yakin ingin mengubah status dari {{ $p->name }}?</p>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
-                    <a type="button" href="{{ url('/admin/pemilu/'.$p->id.'/update-status') }}"
-                        style="transform: translateX(-80%); width: 174px; border-radius: 30px; background-color: #4285F4;"
-                        class="btn text-white">Update</a>
+                    <form action="{{ url('/admin/pemilu/'.$p->id.'/update-status') }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-warning text-white">Update</button>
+                    </form>
                 </div>
         </div>
     </div>

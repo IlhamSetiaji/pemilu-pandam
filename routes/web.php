@@ -31,8 +31,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/pemilu', [AdminController::class, 'showAllPemilu']);
             Route::post('/pemilu', [AdminController::class, 'storePemilu']);
             Route::put('/pemilu/{pemiluID}/update', [AdminController::class, 'updatePemilu']);
-            Route::get('/pemilu/{pemiluID}/update-status', [AdminController::class, 'updateStatusPemilu']);
-            Route::get('/pemilu/{pemiluID}/delete', [AdminController::class, 'deletePemilu']);
+            Route::put('/pemilu/{pemiluID}/update-status', [AdminController::class, 'updateStatusPemilu']);
+            Route::delete('/pemilu/{pemiluID}/delete', [AdminController::class, 'deletePemilu']);
 
             Route::get('/calon', [AdminController::class, 'showAllKetua']);
             Route::post('/calon', [AdminController::class, 'storeKetua']);
