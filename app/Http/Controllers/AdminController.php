@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\KetuaRequest;
-use App\Http\Requests\PemiluRequest;
+use Exception;
 use App\Models\Osis;
 use App\Models\User;
 use App\Models\Pemilu;
-use App\Repositories\PemiluRepositories;
-use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
+use App\Http\Requests\KetuaRequest;
+use App\Http\Requests\PemiluRequest;
 use Illuminate\Support\Facades\File;
+use App\Http\Requests\PemilihRequest;
+use Illuminate\Support\Facades\Crypt;
+use App\Repositories\PemiluRepositories;
+use App\Repositories\PemilihRepositories;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
     protected $pemiluRepositories;
+    protected $pemilihRepositories;
 
-    public function __construct(PemiluRepositories $pemiluRepositories)
+    public function __construct(PemiluRepositories $pemiluRepositories, PemilihRepositories $pemilihRepositories)
     {
         $this->pemiluRepositories = $pemiluRepositories;
+        $this->pemilihRepositories = $pemilihRepositories;
     }
 
     public function generate_password()
@@ -30,7 +35,7 @@ class AdminController extends Controller
         $microtime = $sec . $usec;
         $microtime = str_replace(array(',', '.'), array('', ''), $microtime);
         $microtime = substr_replace($microtime, rand(10000, 99999), -2);
-        $password = substr($microtime, 0, 15) . Str::random(5);
+        $password = substr($microtime, 0, 6) . Str::random(5);
         return $password;
     }
 
@@ -97,12 +102,6 @@ class AdminController extends Controller
         }catch(Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
         }
-        // $pemilu = Pemilu::find($pemiluID);
-        // if (!$pemilu) {
-        //     return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
-        // }
-        // Pemilu::destroy($pemiluID);
-        // return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil dihapus');
     }
 
     public function showAllKetua()
@@ -162,42 +161,27 @@ class AdminController extends Controller
 
     public function showPemilih($pemiluID)
     {
-        $pemilih = User::where('pemilu_id', $pemiluID)->whereHas('roles', function ($query) {
-            $query->where('name', '=', 'pemilih');
-        })->get();
+        $pemilih = $this->pemilihRepositories->show(Crypt::decrypt($pemiluID));
         return view('admin.pemilih', compact('pemilih', 'pemiluID'));
     }
 
-    public function storePemilih($pemiluID)
+    public function storePemilih(PemilihRequest $request, $pemiluID)
     {
-        $validator = Validator::make(request()->all(), [
-            'jumlah' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return redirect('admin/' . $pemiluID . '/pemilih')->withInput()->withErrors($validator);
+        $data = $request->validated();
+        $store = $this->pemilihRepositories->store($data['jumlah'], Crypt::decrypt($pemiluID), $this->generateUuid());
+        if(!$store){
+            return redirect()->back()->withErrors($store);
         }
-        for ($i = 0; $i < request('jumlah'); $i++) {
-            $user = User::create([
-                'pemilu_id' => $pemiluID,
-                'password' => $this->generateUuid(),
-            ]);
-            $user->assignRole('pemilih');
-        }
-        return redirect('admin/' . $pemiluID . '/pemilih')->with('status', 'Data pemilih berhasil dibuat');
+        return redirect()->back()->with('status', 'Data pemilih berhasil dibuat');
     }
 
     public function deletePemilih($pemiluID, $pemilihID)
     {
-        $pemilu = Pemilu::find($pemiluID);
-        if (!$pemilu) {
-            return redirect('admin/' . $pemiluID . '/pemilih')->with('status', 'Data pemilu tidak ditemukan');
+        $delete = $this->pemilihRepositories->delete(Crypt::decrypt($pemiluID), Crypt::decrypt($pemilihID));
+        if(!$delete){
+            return redirect()->back()->withErrors($delete);
         }
-        $user = User::find($pemilihID);
-        if (!$user) {
-            return redirect('admin/' . $pemiluID . '/pemilih')->with('status', 'Data pemilih tidak ditemukan');
-        }
-        User::destroy($pemilihID);
-        return redirect('admin/' . $pemiluID . '/pemilih')->with('status', 'Data pemilih berhasil dihapus');
+        return redirect()->back()->with('status', 'Data pemilih berhasil dihapus');
     }
 
     public function hasilPemilu($pemiluID)

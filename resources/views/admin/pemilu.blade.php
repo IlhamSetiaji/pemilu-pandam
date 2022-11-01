@@ -82,19 +82,23 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                                    {{-- <a href="{{ url('admin/'.$p->id.'/hasil') }}" class="btn btn-outline-success">Hasil</a>
-                                                    <a href="{{ url('admin/'.$p->id.'/pemilih') }}" class="btn btn-success">Lihat Pemilih</a> --}}
+                                                    @if ($p->status == 'ACTIVE')
+                                                    <a href="{{ url('admin/'.$p->id.'/hasil') }}"
+                                                        class="btn btn-outline-success mr-2">Hasil</a>
+                                                    <a href="{{ url('admin/'.Crypt::encrypt($p->id).'/pemilih') }}"
+                                                        class="btn btn-success mr-2">Lihat Pemilih</a>
+                                                    @endif
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#modalUpdateStatus{{ $p->id }}">
-                                                        <button type="button" class="btn btn-info">Ubah Status</button>
+                                                        <button type="button" class="btn btn-info mr-2">Ubah Status</button>
                                                     </a>
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#modalUpdateData{{ $p->id }}">
-                                                        <button type="button" class="btn btn-warning">Edit</button>
+                                                        <button type="button" class="btn btn-warning mr-2">Edit</button>
                                                     </a>
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#modalDeleteData{{ $p->id }}">
-                                                        <button type="button" class="btn btn-danger">Delete</button>
+                                                        <button type="button" class="btn btn-danger mr-2">Delete</button>
                                                     </a>
                                                 </div>
                                             </td>
@@ -103,9 +107,7 @@
                                     @endforeach
                                 </table>
                             </div>
-                            <!-- This is where your code ends -->
                         </div>
-                        <!-- This is where your code ends -->
                     </div>
                 </section>
             </div>

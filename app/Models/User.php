@@ -50,10 +50,10 @@ class User extends Authenticatable
 
         static::created(function ($model) {
             if ($model->name == null) {
-                $model->name .= 'NAMA-' . str_pad($model->id, 5, 0, STR_PAD_LEFT);
+                $model->name .= 'VOKASI-' . str_pad($model->id, 5, 0, STR_PAD_LEFT);
             }
             if ($model->username == null) {
-                $model->username .= 'USER-' . str_pad($model->id, 5, 0, STR_PAD_LEFT);
+                $model->username .= 'VU'.str_pad($model->id, 5, 0, STR_PAD_LEFT);
             }
             $model->save();
         });
