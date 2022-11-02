@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\DapilModel;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -25,6 +26,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PemiluSeeder::class,
             UserSeeder::class,
+            DapilSeeder::class,
+            PresidentSeeder::class,
+            ParlementSeeder::class,
         ]);
     }
 }

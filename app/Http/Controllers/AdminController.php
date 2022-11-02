@@ -68,10 +68,7 @@ class AdminController extends Controller
     {
         try{
             $payload = $request->validated();
-            $update = $this->pemiluRepositories->update($payload, $pemiluID);
-            if(!$update){
-                return redirect('admin/pemilu')->withErrors("Tidak Dapat Update Pengguna Sudah Memilih");
-            }
+            $this->pemiluRepositories->update($payload, $pemiluID);
             return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil diupdate');
         }catch(Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
@@ -82,9 +79,6 @@ class AdminController extends Controller
     {
         try{
             $update = $this->pemiluRepositories->statusAndDelete($pemiluID, $request->_method);
-            if(!$update){
-                return redirect()->back()->withErrors('Tidak Dapat Update Pengguna Sudah Memilih');
-            }
             return redirect('admin/pemilu')->with('status', 'Status pemilu berhasil diupdate');
         }catch(Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
@@ -161,23 +155,23 @@ class AdminController extends Controller
 
     public function showPemilih($pemiluID)
     {
-        $pemilih = $this->pemilihRepositories->show(Crypt::decrypt($pemiluID));
-        return view('admin.pemilih', compact('pemilih', 'pemiluID'));
+        $data = $this->pemilihRepositories->show(Crypt::decrypt($pemiluID));
+        return view('admin.pemilih', compact('data', 'pemiluID'));
     }
 
     public function storePemilih(PemilihRequest $request, $pemiluID)
     {
         $data = $request->validated();
-        $store = $this->pemilihRepositories->store($data['jumlah'], Crypt::decrypt($pemiluID), $this->generateUuid());
+        $store = $this->pemilihRepositories->store($data, Crypt::decrypt($pemiluID), $this->generateUuid());
         if(!$store){
             return redirect()->back()->withErrors($store);
         }
         return redirect()->back()->with('status', 'Data pemilih berhasil dibuat');
     }
 
-    public function deletePemilih($pemiluID, $pemilihID)
+    public function deletePemilih($pemilihID)
     {
-        $delete = $this->pemilihRepositories->delete(Crypt::decrypt($pemiluID), Crypt::decrypt($pemilihID));
+        $delete = $this->pemilihRepositories->delete(Crypt::decrypt($pemilihID));
         if(!$delete){
             return redirect()->back()->withErrors($delete);
         }
