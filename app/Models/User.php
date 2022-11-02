@@ -68,4 +68,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'pemilih_osis', 'user_id', 'osis_id')->withTimestamps();
     }
+
+    public function profile(){
+        return $this->hasOne(Profile::class, 'user_id');
+    }
 }

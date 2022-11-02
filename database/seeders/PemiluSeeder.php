@@ -18,9 +18,9 @@ class PemiluSeeder extends Seeder
     {
         collect([
             [
-                'name' => 'Pemilu 1',
+                'name' => 'Pemilu Sekolah Vokasi UNS',
                 'start_date' => Carbon::now(),
-                'end_date' => '2022-06-30 23:59:00',
+                'end_date' => Carbon::now()->addDays(2),
             ],
         ])->each(function($pemilu){
             Pemilu::create($pemilu);

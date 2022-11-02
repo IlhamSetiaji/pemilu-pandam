@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/{pemiluID}/pemilih', [AdminController::class, 'showPemilih']);
             Route::post('/{pemiluID}/pemilih', [AdminController::class, 'storePemilih']);
-            Route::get('/{pemiluID}/pemilih/{pemilihID}/delete', [AdminController::class, 'deletePemilih']);
+            Route::delete('pemilih/{pemilihID}/delete', [AdminController::class, 'deletePemilih']);
 
             Route::get('/{pemiluID}/hasil', [AdminController::class, 'hasilPemilu']);
         });

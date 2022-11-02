@@ -14,23 +14,15 @@ use App\Models\Pemilu;
         }
 
         public function update($request, $pemiluId){
-            $pemilu = Pemilu::with(['users' => function($query){
-                $query->whereHas('pemilih_osis')->where('status', 'SUDAH');
-            }])->findOrFail($pemiluId);
-
-            if($pemilu->users_count > 1){
-                return false;
-            }
+            $pemilu = Pemilu::findOrFail($pemiluId);
 
             $pemilu->update($request);
         }
 
         public function statusAndDelete($pemiluId, $request){
-            $data = Pemilu::with(['users' => function($query){
-                $query->whereHas('pemilih_osis')->where('status', 'SUDAH');
-            }])->findOrFail($pemiluId);
+            $data = Pemilu::findOrFail($pemiluId);
 
-            if($request == 'PUT' && $data->users_count < 1){
+            if($request == 'PUT'){
                 $data->status == 'ACTIVE' ? $status = 'INACTIVE' : $status = 'ACTIVE';
                 $data->update(['status' => $status]);
             }elseif($request == 'DELETE' && $data->users_count < 1){

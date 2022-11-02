@@ -25,6 +25,7 @@ class PemilihRequest extends FormRequest
     {
         return [
             'jumlah' => 'required|numeric',
+            'dapil' => 'required|numeric'
         ];
     }
 }

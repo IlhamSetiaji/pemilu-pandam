@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Profile as ModelsProfile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,9 +12,13 @@ class Pemilu extends Model
     protected $table = 'pemilu';
     protected $guarded = ['id'];
 
-    public function users()
+    public function pemilih()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(ModelsProfile::class, 'pemilu_id');
+    }
+
+    public function dapil(){
+        return $this->hasMany(DapilModel::class, 'pemilu_id');
     }
 
     public function osis()

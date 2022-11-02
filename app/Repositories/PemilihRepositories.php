@@ -8,20 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class PemilihRepositories{
     public function show($pemiluId){
-        $data = User::where('pemilu_id', $pemiluId)->whereHas('roles', function ($query) {
-            $query->where('name', '=', 'pemilih');
-        })->get();
-
+        $data = Pemilu::with('pemilih.user', 'pemilih.dapil', 'dapil')->findOrFail($pemiluId);
         return $data;
     }
 
-    public function store($jumlah, $pemiluID, $password){
+    public function store($data, $pemiluID, $password){
         DB::beginTransaction();
         try{
-            for ($i = 0; $i < $jumlah; $i++) {
+            for ($i = 0; $i < $data['jumlah']; $i++) {
                 $user = User::create([
                     'pemilu_id' => $pemiluID,
                     'password' => $password,
+                ]);
+                $user->profile()->create([
+                    'pemilu_id' => $pemiluID,
+                    'dapil_id' => $data['dapil']
                 ]);
                 $user->assignRole('pemilih');
             }
@@ -33,10 +34,9 @@ class PemilihRepositories{
         }
     }
 
-    public function delete($pemiluId, $pemilihId){
+    public function delete($pemilihId){
         try{
-            $pemilu = Pemilu::findOrFail($pemiluId);
-            $pemilu->users()->findOrFail($pemilihId)->delete();
+            User::findOrFail($pemilihId)->delete();
             return true;
         }catch(Exception $e){
             return $e->getMessage();

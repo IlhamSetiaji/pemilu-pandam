@@ -15,6 +15,14 @@
                         <label for="name" class="form-label">Jumlah Pemilih</label>
                         <input type="number" min="0" class="form-control" id="name" name="jumlah">
                     </div>
+                    <div class="form-group mt-3">
+                        <label for="exampleFormControlSelect1">Pilih Dapil</label>
+                        <select class="form-control" name="dapil" id="exampleFormControlSelect1">
+                            @foreach ($data->dapil as $dapil)
+                                <option value="{{$dapil->id}}">{{$dapil->name}}</option>
+                            @endforeach
+                        </select>
+                      </div>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

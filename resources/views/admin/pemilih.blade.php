@@ -38,7 +38,7 @@
                     </div>
                     @endif
                     <div class="section-header">
-                        <h1>Halaman Data Pemilih</h1>
+                        <h1>Halaman Data Pemilih "{{$data->name}}"</h1>
                     </div>
                     <div class="section-body">
                         <div class="card-body p-0">
@@ -54,27 +54,31 @@
                                             <th>Name</th>
                                             <th>Username</th>
                                             <th>Password</th>
+                                            <th>Dapil</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($pemilih as $key => $p)
+                                        @foreach ($data->pemilih as $p)
                                         <tr>
                                             <td class="text-center">
-                                                {{ $key+1 }}
+                                                {{ $loop->iteration }}
                                             </td>
                                             <td>
-                                                {{ $p->name }}
+                                                {{ $p->user->name }}
                                             </td>
                                             <td>
-                                                {{ $p->username }}
+                                                {{ $p->user->username }}
                                             </td>
                                             <td>
-                                                {{ $p->password }}
+                                                {{ $p->user->password }}
                                             </td>
                                             <td>
-                                                @if ($p->status == 'SUDAH')
+                                                {{$p->dapil->name}}
+                                            </td>
+                                            <td>
+                                                @if ($p->status == 'voted')
                                                 <span class="badge badge-success">Sudah Memilih</span>
                                                 @else
                                                 <span class="badge badge-danger">Belum Memilih</span>
@@ -89,8 +93,8 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
-                                    @endforeach
                                 </table>
                             </div>
                             <!-- This is where your code ends -->
