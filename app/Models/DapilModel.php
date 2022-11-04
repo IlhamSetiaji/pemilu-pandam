@@ -10,4 +10,8 @@ class DapilModel extends Model
     use HasFactory;
     protected $table = 'dapil';
     protected $guarded = ['id'];
+
+    public function pemilu(){
+        return $this->belongsTo(Pemilu::class);
+    }
 }

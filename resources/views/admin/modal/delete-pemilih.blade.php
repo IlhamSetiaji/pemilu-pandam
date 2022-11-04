@@ -18,9 +18,6 @@
                         @method('delete')
                         <button class="btn btn-danger" type="submit">Delete</button>
                     </form>
-                    {{-- <a type="button" href="{{ url('/admin/pemilih/'.Crypt::encrypt($p->id).'/delete') }}"
-                        style="transform: translateX(-80%); width: 174px; border-radius: 30px; background-color: #ff0000;"
-                        class="btn text-white">Delete</a> --}}
                 </div>
         </div>
     </div>

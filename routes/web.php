@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DapilController;
 use App\Http\Controllers\PemilihController;
 
 /*
@@ -44,6 +45,13 @@ Route::middleware('auth')->group(function () {
             Route::delete('pemilih/{pemilihID}/delete', [AdminController::class, 'deletePemilih']);
 
             Route::get('/{pemiluID}/hasil', [AdminController::class, 'hasilPemilu']);
+
+            Route::prefix('dapil')->group(function(){
+                Route::get('/', [DapilController::class, 'index']);
+                Route::post('create', [DapilController::class, 'create']);
+                Route::put('{id}/update', [DapilController::class, 'update']);
+                Route::delete('{id}/delete', [DapilController::class, 'delete']);
+            });
         });
     });
 });
