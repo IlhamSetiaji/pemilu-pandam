@@ -16,9 +16,8 @@
                     <span>Data Pemilu</span></a></li>
             <li><a class="nav-link" href="{{ url('admin/dapil') }}"><i class="fas fa-tachometer-alt"></i>
                     <span>Data Dapil</span></a></li>
-            <li class="menu-header">Data Calon Ketua</li>
-            <li><a class="nav-link" href="{{ url('admin/calon') }}"><i class="fas fa-tachometer-alt"></i> <span>Data
-                        Calon Ketua</span></a></li>
+            <li class="menu-header">President</li>
+            <li><a class="nav-link" href="{{ url('admin/president') }}"><i class="fas fa-tachometer-alt"></i> <span>Calon President</span></a></li>
             @endif
             @if (auth()->user()->hasRole('pemilih'))
             <li class="menu-header">Dashboard</li>
@@ -26,10 +25,5 @@
                     <span>Dashboard</span></a></li>
             @endif
         </ul>
-        {{--         <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-          <a href="https://getstisla.com/docs" class="btn btn-primary btn-lg btn-block btn-icon-split">
-            <i class="fas fa-rocket"></i> Documentation
-          </a>
-        </div> --}}
     </aside>
 </div>

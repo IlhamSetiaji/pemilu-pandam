@@ -10,4 +10,8 @@ class ParlementModel extends Model
     use HasFactory;
     protected $table = 'parlement';
     protected $guarded = ['id'];
+
+    public function dapil(){
+        return $this->belongsTo(DapilModel::class);
+    }
 }

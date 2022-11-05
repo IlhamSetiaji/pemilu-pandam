@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DapilController;
+use App\Http\Controllers\ParlemenController;
 use App\Http\Controllers\PemilihController;
+use App\Http\Controllers\PresidentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +53,22 @@ Route::middleware('auth')->group(function () {
                 Route::post('create', [DapilController::class, 'create']);
                 Route::put('{id}/update', [DapilController::class, 'update']);
                 Route::delete('{id}/delete', [DapilController::class, 'delete']);
+            });
+
+            Route::prefix('parlement')->group(function(){
+                Route::get('{id}/show', [ParlemenController::class, 'index']);
+                Route::get('{id}/edit', [ParlemenController::class, 'editView']);
+                Route::get('{id}/create', [ParlemenController::class, 'create']);
+                Route::post('{id}/create', [ParlemenController::class, 'store']);
+                Route::put('{id}/update', [ParlemenController::class, 'update']);
+                Route::delete('{id}/delete', [ParlemenController::class, 'delete']);
+            });
+
+            Route::prefix('president')->group(function(){
+                Route::get('/', [PresidentController::class, 'listPemilu']);
+                Route::get('{id}/list', [PresidentController::class, 'listPresident']);
+                Route::get('{id}/create', [PresidentController::class, 'create']);
+                Route::post('{id}/create', [PresidentController::class, 'store']);
             });
         });
     });
