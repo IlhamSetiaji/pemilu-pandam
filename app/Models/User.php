@@ -58,16 +58,10 @@ class User extends Authenticatable
             $model->save();
         });
     }
-
-    public function pemilu()
-    {
-        return $this->belongsTo(Pemilu::class, 'pemilu_id');
-    }
-
-    public function pemilih_osis()
-    {
-        return $this->belongsToMany(User::class, 'pemilih_osis', 'user_id', 'osis_id')->withTimestamps();
-    }
+    // public function pemilih_osis()
+    // {
+    //     return $this->belongsToMany(User::class, 'pemilih_osis', 'user_id', 'osis_id')->withTimestamps();
+    // }
 
     public function profile(){
         return $this->hasOne(Profile::class, 'user_id');

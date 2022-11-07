@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::middleware('is.pemilih')->group(function () {
         Route::get('/', [PemilihController::class, 'index']);
-        Route::get('/{userID}/pilih', [PemilihController::class, 'pilihKetua']);
+        Route::post('/{userID}/vote', [PemilihController::class, 'vote']);
     });
     Route::middleware('is.admin')->group(function () {
         Route::prefix('admin')->group(function () {
@@ -69,6 +69,9 @@ Route::middleware('auth')->group(function () {
                 Route::get('{id}/list', [PresidentController::class, 'listPresident']);
                 Route::get('{id}/create', [PresidentController::class, 'create']);
                 Route::post('{id}/create', [PresidentController::class, 'store']);
+                Route::get('{id}/edit', [PresidentController::class, 'edit']);
+                Route::put('{id}/edit', [PresidentController::class, 'update']);
+                Route::delete('{id}/delete', [PresidentController::class, 'delete']);
             });
         });
     });

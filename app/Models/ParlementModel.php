@@ -14,4 +14,8 @@ class ParlementModel extends Model
     public function dapil(){
         return $this->belongsTo(DapilModel::class);
     }
+
+    public function votes(){
+        return $this->hasMany(VoteModel::class, 'parlement_id');
+    }
 }

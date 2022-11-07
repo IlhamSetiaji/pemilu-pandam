@@ -79,9 +79,10 @@
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <a
-                                                        href="">
+                                                        href="{{url('admin/president/'.Crypt::encrypt($p->id).'/edit')}}">
                                                         <button type="button" class="btn btn-warning">Edit</button>
                                                     </a>
+                                                    <button type="button" class="btn btn-danger" data-toggle = 'modal' data-target="#deletePresident{{$p->id}}">Delete</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -99,6 +100,7 @@
         </div>
     </div>
     @include('stisla.script')
+    @include('admin.modal.delete-president');
 </body>
 
 </html>

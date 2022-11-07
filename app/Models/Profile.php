@@ -18,4 +18,13 @@ class Profile extends Model
     public function dapil(){
         return $this->belongsTo(DapilModel::class);
     }
+
+    public function pemilu()
+    {
+        return $this->belongsTo(Pemilu::class, 'pemilu_id');
+    }
+
+    public function vote(){
+        return $this->hasOne(VoteModel::class, 'profile_id');
+    }
 }
