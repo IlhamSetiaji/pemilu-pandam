@@ -180,15 +180,16 @@ class AdminController extends Controller
 
     public function hasilPemilu($pemiluID)
     {
-        $pemilu = Pemilu::find($pemiluID);
-        if (!$pemilu) {
-            return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
-        }
-        $users = Osis::where('pemilu_id', $pemiluID)->get();
-        $jumlah = array();
-        foreach ($users as $u) {
-            $jumlah[] = $u->pemilih_osis()->count();
-        }
-        return view('admin.hasil', compact('users', 'jumlah'));
+        $pemilu = Pemilu::with('dapil.parlement.votes', 'president.votes')->findOrFail(Crypt::decrypt($pemiluID));
+        return view('admin.hasil', compact('pemilu'));
+        // if (!$pemilu) {
+        //     return redirect('admin/pemilu')->with('status', 'Data pemilu tidak ditemukan');
+        // }
+        // $users = Osis::where('pemilu_id', $pemiluID)->get();
+        // $jumlah = array();
+        // foreach ($users as $u) {
+        //     $jumlah[] = $u->pemilih_osis()->count();
+        // }
+        // return view('admin.hasil', compact('users', 'jumlah'));
     }
 }

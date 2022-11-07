@@ -38,12 +38,12 @@
                     </div>
                     @endif
                     <div class="section-header">
-                        <h1>Halaman Data Pemilu</h1>
+                        <h1>Halaman Data Calon President</h1>
                     </div>
                     <div class="section-body">
                         <div class="card-body p-0">
-                            <a class="btn btn-primary" href="#" data-toggle="modal"
-                                data-target="#createDapil">Tambah Data Pemilu</a></br></br>
+                            <a class="btn btn-primary"
+                                href="{{url('admin/president/'.Crypt::encrypt($data->id).'/create')}}">Tambah Calon President</a></br></br>
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">
                                     <thead>
@@ -52,37 +52,37 @@
                                                 #
                                             </th>
                                             <th>Name</th>
-                                            <th>Created_At</th>
-                                            <th>Pemilu</th>
+                                            <th>Visi</th>
+                                            <th>Misi</th>
+                                            <th>Photo</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $key => $p)
+                                        @foreach ($data->president as $p)
                                         <tr>
                                             <td class="text-center">
-                                                {{ $key+1 }}
+                                                {{ $loop->iteration }}
                                             </td>
                                             <td>
                                                 {{ $p->name }}
                                             </td>
                                             <td>
-                                                {{ $p->created_at }}
+                                                {{ $p->visi }}
                                             </td>
                                             <td>
-                                                {{$p->pemilu->name}}
+                                                {{$p->misi}}
+                                            </td>
+                                            <td>
+                                                <img src="{{url('storage/'.$p->photo)}}" alt="Foto President" width="70px">
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <a href="{{url('admin/parlement/'.Crypt::encrypt($p->id).'/show')}}" class="btn btn-primary mr-2">Daftar Legislatif</a>
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#editDapil{{ $p->id }}">
-                                                        <button type="button" class="btn btn-warning mr-2">Edit</button>
+                                                    <a
+                                                        href="{{url('admin/president/'.Crypt::encrypt($p->id).'/edit')}}">
+                                                        <button type="button" class="btn btn-warning">Edit</button>
                                                     </a>
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#deleteDapil{{ $p->id }}">
-                                                        <button type="button" class="btn btn-danger mr-2">Delete</button>
-                                                    </a>
+                                                    <button type="button" class="btn btn-danger" data-toggle = 'modal' data-target="#deletePresident{{$p->id}}">Delete</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -100,9 +100,7 @@
         </div>
     </div>
     @include('stisla.script')
-    @include('admin.modal.create-dapil')
-    @include('admin.modal.edit-dapil');
-    @include('admin.modal.delete-dapil');
+    @include('admin.modal.delete-president');
 </body>
 
 </html>

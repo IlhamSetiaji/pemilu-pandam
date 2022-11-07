@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('dapil_id')->constrained('dapil')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
-            $table->string('visi');
-            $table->string('misi');
+            $table->text('visi');
+            $table->text('misi');
             $table->text('photo');
             $table->timestamps();
         });

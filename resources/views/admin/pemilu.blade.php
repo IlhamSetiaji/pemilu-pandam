@@ -83,7 +83,7 @@
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     @if ($p->status == 'ACTIVE')
-                                                    <a href="{{ url('admin/'.$p->id.'/hasil') }}"
+                                                    <a href="{{ url('admin/'.Crypt::encrypt($p->id).'/hasil') }}"
                                                         class="btn btn-outline-success mr-2">Hasil</a>
                                                     <a href="{{ url('admin/'.Crypt::encrypt($p->id).'/pemilih') }}"
                                                         class="btn btn-success mr-2">Lihat Pemilih</a>

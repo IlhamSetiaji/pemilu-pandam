@@ -24,7 +24,7 @@ class AuthController extends Controller
         {
             return redirect('login')->withInput()->withErrors($validator);
         }
-        $user = User::where('username',request('username'))->first();
+        $user = User::with('profile')->where('username',request('username'))->first();
         if($user)
         {
             if($user->password == request('password'))
@@ -36,6 +36,9 @@ class AuthController extends Controller
                 }
                 if($user->hasRole('pemilih'))
                 {
+                    if($user->profile->status == 'voted'){
+                        return redirect('login')->withInput()->withErrors("Anda Sudah Menggunakan Hak Pilih");
+                    }
                     Auth::login($user);
                     return redirect('/');
                 }

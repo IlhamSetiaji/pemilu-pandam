@@ -14,4 +14,8 @@ class DapilModel extends Model
     public function pemilu(){
         return $this->belongsTo(Pemilu::class);
     }
+
+    public function parlement(){
+        return $this->hasMany(ParlementModel::class, 'dapil_id');
+    }
 }
