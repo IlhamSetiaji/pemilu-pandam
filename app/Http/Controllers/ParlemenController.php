@@ -21,12 +21,11 @@ class ParlemenController extends Controller
     public function index($id){
         $data = DapilModel::with('parlement')->findOrFail(Crypt::decrypt($id));
         return view('admin.parlement.index', compact('data'));
-        return $data;
     }
 
-    public function create($pemilu_id){
-        $pemilu_id = Crypt::decrypt($pemilu_id);
-        return view('admin.parlement.create', compact('pemilu_id'));
+    public function create($id){
+        $id = Crypt::decrypt($id);
+        return view('admin.parlement.create', compact('id'));
     }
 
     public function store(ParlemenRequest $request, $dapil_id){
