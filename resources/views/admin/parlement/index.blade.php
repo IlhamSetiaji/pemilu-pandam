@@ -43,7 +43,7 @@
                     <div class="section-body">
                         <div class="card-body p-0">
                             <a class="btn btn-primary"
-                                href="{{url('admin/parlement/'.Crypt::encrypt($data->pemilu_id).'/create')}}">Tambah
+                                href="{{url('admin/parlement/'.Crypt::encrypt($data->id).'/create')}}">Tambah
                                 Data Parlement</a></br></br>
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">

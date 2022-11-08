@@ -43,7 +43,7 @@
                     <div class="section-body">
                         <div class="card-body p-0">
                             <div class="container">
-                                <form action="{{url('admin/parlement/'.Crypt::encrypt($pemilu_id).'/create')}}" method="POST" enctype="multipart/form-data">
+                                <form action="{{url('admin/parlement/'.Crypt::encrypt($id).'/create')}}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
                                         <label for="">Nama Calon Legislatif</label>
