@@ -67,15 +67,15 @@
                         @if ($data->profile->status != 'voted')
                         <h2 class="section-title">Hi, {{ $data->username }}</h2>
                         <p class="section-lead">
-                            Welcome to pemilih page
+                            Selamat Datang di Halaman Pemungutan Suara!!!
                         </p>
-                        <form action="{{url(Crypt::encrypt($data->id).'/vote')}}" method="POST">
+                        <form action="{{url(Crypt::encrypt($data->id).'/vote')}}" id="vote" method="POST">
                             @csrf
                             <div class="container-fluid">
-                                <h1 class="mb-4">Pilih <b>"President dan Wakil President"</b></h1>
+                                <h1 class="mb-4">Pilih <b>"Presiden dan Wakil Presiden"</b></h1>
                                 <div class="row">
                                     @forelse ($data->profile->pemilu->president as $president)
-                                    <div class="col-md-4 col-lg-4 col-sm-4">
+                                    <div class="col-md-6 col-lg-4">
 
                                         <label>
                                             <input type="radio" name="president" value="{{$president->id}}"
@@ -84,23 +84,14 @@
                                             <div class="card card-default card-input">
                                                 <div class="card-header">
                                                     <img src="{{url('storage/'.$president->photo)}}" alt=""
-                                                        width="450px" height="450px">
+                                                        width="100%">
                                                 </div>
                                                 <div class="card-body">
-                                                    <table class="table table-borderless">
-                                                        <tbody>
-                                                            <tr>
-                                                                <th scope="row">Nama President dan Wakil</th>
-                                                                <td>{{$president->name}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <br>
-                                                    <b>Visi</b>
-                                                    <p>{{$president->visi}}</p>
-                                                    <br>
-                                                    <b>Misi</b>
-                                                    <p>{{$president->visi}}</p>
+                                                    <b>Presiden dan Wakil Presiden</b>
+                                                    <p>{{$president->name}}</p>
+                                                    <center>
+                                                        <button class="btn btn-info mt-3" type="button" data-toggle="modal" data-target="#detailPresident{{$president->id}}">Detail</button>
+                                                    </center>
                                                 </div>
                                             </div>
 
@@ -111,53 +102,45 @@
                                     Empty Data
                                     @endforelse
                                 </div>
+                                {{-- Dema --}}
+                                <h1 class="mb-4 mt-3">Pilih Dewan Mahasiswa <b>"{{$data->profile->dapil->name}}"</b>
+                                </h1>
 
-                            </div>
-                            {{-- Dema --}}
-                            <h1 class="mb-4 mt-3">Pilih Dewan Mahasiswa <b>"{{$data->profile->dapil->name}}"</b></h1>
+                                <div class="row">
+                                    @forelse ($data->profile->dapil->parlement as $parlement)
+                                    <div class="col-md-6 col-lg-4">
 
-                            <div class="row">
-                                @forelse ($data->profile->dapil->parlement as $parlement)
-                                <div class="col-md-4 col-lg-4 col-sm-4">
+                                        <label>
+                                            <input type="radio" name="parlement" value="{{$parlement->id}}"
+                                                class="card-input-element" />
 
-                                    <label>
-                                        <input type="radio" name="parlement" value="{{$parlement->id}}"
-                                            class="card-input-element" />
-
-                                        <div class="card card-default card-input">
-                                            <div class="card-header">
-                                                <img src="{{url('storage/'.$parlement->photo)}}" alt="" width="450px"
-                                                    height="450px">
+                                            <div class="card card-default card-input">
+                                                <div class="card-header">
+                                                    <img src="{{url('storage/'.$parlement->photo)}}" alt="{{$parlement->name}}" width="100%">
+                                                </div>
+                                                <div class="card-body">
+                                                    <b>Nama Calon Anggota DEMA</b>
+                                                    <p>{{$parlement->name}}</p>
+                                                    <center>
+                                                        <button class="btn btn-info mt-3" type="button" data-toggle="modal" data-target="#detailParlement{{$parlement->id}}">Detail</button>
+                                                    </center>
+                                                </div>
                                             </div>
-                                            <div class="card-body">
-                                                <table class="table table-borderless">
-                                                    <tbody>
-                                                        <tr>
-                                                            <th scope="row">Nama President dan Wakil</th>
-                                                            <td>{{$parlement->name}}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <br>
-                                                <b>Visi</b>
-                                                <p>{{$parlement->visi}}</p>
-                                                <br>
-                                                <b>Misi</b>
-                                                <p>{{$parlement->visi}}</p>
-                                            </div>
-                                        </div>
 
-                                    </label>
+                                        </label>
 
+                                    </div>
+                                    @empty
+                                    Empty Data
+                                    @endforelse
                                 </div>
-                                @empty
-                                Empty Data
-                                @endforelse
+                                <div class="container mt-4">
+                                    <button class="btn btn-success btn-lg btn-block" type="button" data-toggle="modal" data-target="#confirmation">Yakin dan Simpan Pilihan</button>
+                                </div>
                             </div>
-                            <button class="btn btn-success" type="submit">Vote</button>
                         </form>
                         @else
-                            <h2>Anda Sudah Melakukan Vote</h2>
+                        <h2>Anda Sudah Melakukan Vote</h2>
                         @endif
                         <!-- This is where your code ends -->
                     </div>
@@ -170,6 +153,9 @@
     </div>
     {{-- @include('pemilih.modal.show-calon-photo') --}}
     @include('stisla.script')
+    @include('pemilih.modal.detail-president');
+    @include('pemilih.modal.detail-parlement');
+    @include('pemilih.modal.confirmation');
 </body>
 
 </html>
