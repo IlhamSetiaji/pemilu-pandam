@@ -38,7 +38,7 @@
                     </div>
                     @endif
                     <div class="section-header">
-                        <h1>Admin Page</h1>
+                        <h1>Halaman Hasil Suara</h1>
                     </div>
                     <div class="section-body">
                         <center>
@@ -52,8 +52,8 @@
                                         <h4>{{ $president->name }}</h4>
                                     </div>
                                     <div class="card-body">
-                                        <div class="empty-state" data-height="400">
-                                            <div class="empty-state-icon">
+                                        <div class="empty-state">
+                                            <div class="container">
                                                 <img src="{{url('storage/'.$president->photo)}}" class="img-fluid"
                                                     alt="{{$president->name}}">
                                             </div>
@@ -78,30 +78,24 @@
                     </div>
                     {{-- Dema --}}
                     @foreach ($pemilu->dapil as $dapil)
-                    <div class="section-body">
+                    <div class="section-body mt-5">
                         <center>
                             <h2 class="mb-5 mt-3">Perwakilan <b>"{{$dapil->name}}"</b></h2>
+                            <h5 class="mb-5">"{{$dapil->pemilih->count()}}" Suara Masuk</h5>
+                            <br>
                         </center>
                         <div class="row">
                             @foreach ($dapil->parlement as $parlement)
-                            <div class="col-12 col-md-6 col-sm-12">
+                            <div class="col-12 col-md-4 col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <h4>{{ $parlement->name }}</h4>
                                     </div>
                                     <div class="card-body">
-                                        <div class="empty-state" data-height="400">
-                                            <div class="empty-state-icon">
+                                        <div class="empty-state">
+                                            <div class="container">
                                                 <img src="{{url('storage/'.$parlement->photo)}}" class="img-fluid" alt="{{$president->name}}">
                                             </div>
-                                            <h2>Visi</h2>
-                                            <p class="lead">
-                                                {{ $parlement->visi }}
-                                            </p>
-                                            <h2>Misi</h2>
-                                            <p class="lead">
-                                                {{ $parlement->misi }}
-                                            </p>
                                             <h2>Jumlah Suara</h2>
                                             <a href="#" class="btn btn-primary mt-4">{{ $parlement->votes->count() }}</a>
                                         </div>
