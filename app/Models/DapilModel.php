@@ -18,4 +18,8 @@ class DapilModel extends Model
     public function parlement(){
         return $this->hasMany(ParlementModel::class, 'dapil_id');
     }
+
+    public function pemilih(){
+        return $this->hasMany(Profile::class, 'dapil_id');
+    }
 }
