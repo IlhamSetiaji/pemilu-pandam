@@ -9,33 +9,33 @@
     <div id="app">
         <section class="section">
             @if ($errors->any())
-            @foreach ($errors->all() as $error)
-            <div class="alert alert-warning alert-dismissible show fade">
-                <div class="alert-body">
-                    <button class="close" data-dismiss="alert">
-                        <span>&times;</span>
-                    </button>
-                    {{ $error }}
-                </div>
-            </div>
-            @endforeach
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-warning alert-dismissible show fade">
+                        <div class="alert-body">
+                            <button class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                            {{ $error }}
+                        </div>
+                    </div>
+                @endforeach
             @endif
             @if (session('status'))
-            <div class="alert alert-info alert-dismissible show fade">
-                <div class="alert-body">
-                    <button class="close" data-dismiss="alert">
-                        <span>&times;</span>
-                    </button>
-                    {{ session('status') }}
+                <div class="alert alert-info alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                        {{ session('status') }}
+                    </div>
                 </div>
-            </div>
             @endif
             <div class="d-flex flex-wrap align-items-stretch">
                 <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
                     <div class="p-4 m-3">
                         <img src="{{ asset('Stisla/assets/img/AMIKOM.png') }}" alt="logo" width="80"
                             class="shadow-light rounded-circle mb-5 mt-2">
-                        <h4 class="text-dark font-weight-normal">Welcome to <span class="font-weight-bold">Pemilu OSIS</span>
+                        <h4 class="text-dark font-weight-normal">Welcome to <span class="font-weight-bold">Pemilu</span>
                         </h4>
                         <p class="text-muted">Before you get started, you must login or register if you don't already
                             have an account.</p>
@@ -43,12 +43,12 @@
                             @csrf
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input id="username" type="text" class="form-control" name="username" tabindex="1" required
-                                    autofocus>
+                                <input id="username" type="text" class="form-control" name="username" tabindex="1"
+                                    required autofocus>
                                 @error('username')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
                                 @enderror
                             </div>
 
@@ -56,23 +56,24 @@
                                 <div class="d-block">
                                     <label for="password" class="control-label">Password</label>
                                 </div>
-                                <input id="password" type="password" class="form-control" name="password" tabindex="2"
-                                    required>
+                                <input id="password" type="password" class="form-control" name="password"
+                                    tabindex="2" required>
                                 @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
                                 @enderror
                             </div>
                             <div class="form-group text-right">
-                                <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right" tabindex="4">
+                                <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right"
+                                    tabindex="4">
                                     Login
                                 </button>
                             </div>
                         </form>
 
                         <div class="text-center mt-5 text-small">
-                            Copyright &copy; Pemilu OSIS. Made with 💙 by GIT Solution
+                            Copyright &copy; Pemilu OSIS. Made with 💙 by CV. Lantern Technology
                             <div class="mt-2">
                                 <a href="#">Privacy Policy</a>
                                 <div class="bullet"></div>

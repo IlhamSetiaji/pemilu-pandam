@@ -47,15 +47,16 @@ Route::middleware('auth')->group(function () {
             Route::delete('pemilih/{pemilihID}/delete', [AdminController::class, 'deletePemilih']);
 
             Route::get('/{pemiluID}/hasil', [AdminController::class, 'hasilPemilu']);
+            Route::get('/{pemiluID}/latest-pemilu', [AdminController::class, 'latestPemilu']);
 
-            Route::prefix('dapil')->group(function(){
+            Route::prefix('dapil')->group(function () {
                 Route::get('/', [DapilController::class, 'index']);
                 Route::post('create', [DapilController::class, 'create']);
                 Route::put('{id}/update', [DapilController::class, 'update']);
                 Route::delete('{id}/delete', [DapilController::class, 'delete']);
             });
 
-            Route::prefix('parlement')->group(function(){
+            Route::prefix('parlement')->group(function () {
                 Route::get('{id}/show', [ParlemenController::class, 'index']);
                 Route::get('{id}/edit', [ParlemenController::class, 'editView']);
                 Route::get('{id}/create', [ParlemenController::class, 'create']);
@@ -64,7 +65,7 @@ Route::middleware('auth')->group(function () {
                 Route::delete('{id}/delete', [ParlemenController::class, 'delete']);
             });
 
-            Route::prefix('president')->group(function(){
+            Route::prefix('president')->group(function () {
                 Route::get('/', [PresidentController::class, 'listPemilu']);
                 Route::get('{id}/list', [PresidentController::class, 'listPresident']);
                 Route::get('{id}/create', [PresidentController::class, 'create']);
