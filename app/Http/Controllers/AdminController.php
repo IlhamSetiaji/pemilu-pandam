@@ -13,9 +13,11 @@ use App\Http\Requests\KetuaRequest;
 use App\Http\Requests\PemiluRequest;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\PemilihRequest;
+use App\Models\VoteModel;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\PemiluRepositories;
 use App\Repositories\PemilihRepositories;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
@@ -39,16 +41,23 @@ class AdminController extends Controller
         return $password;
     }
 
-    public function generateUuid()
-    {
-        $uuid = Str::uuid()->toString();
-        $pass = str_replace('-', '', $uuid);
-        return $pass;
-    }
-
     public function index()
     {
-        return view('admin.admin');
+        // $presidentResults = VoteModel::
+        $pemilu = Pemilu::where('status', 'ACTIVE')->where('end_date', '>', Carbon::now())->latest('id')->exists();
+        // return $pemilu;
+        $endDate = Carbon::parse(Pemilu::latest('id')->first()->end_date)->format('M j, Y h:i:s');
+        $result = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
+            $e->where('status', 'voted');
+        }])->latest('id')->first();
+        $president = array();
+        $count = array();
+        foreach ($result->president as $value) {
+            array_push($count, $value->votes->count());
+            array_push($president, $value->name);
+        }
+        // return $president;
+        return view('admin.admin', compact('pemilu', 'endDate', 'president', 'count', 'result'));
     }
 
     public function showAllPemilu()
@@ -66,34 +75,34 @@ class AdminController extends Controller
 
     public function updatePemilu(PemiluRequest $request, $pemiluID)
     {
-        try{
+        try {
             $payload = $request->validated();
             $this->pemiluRepositories->update($payload, $pemiluID);
             return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil diupdate');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
 
     public function updateStatusPemilu(Request $request, $pemiluID)
     {
-        try{
+        try {
             $update = $this->pemiluRepositories->statusAndDelete($pemiluID, $request->_method);
             return redirect('admin/pemilu')->with('status', 'Status pemilu berhasil diupdate');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
 
-    public function deletePemilu(Request $request,$pemiluID)
+    public function deletePemilu(Request $request, $pemiluID)
     {
-        try{
+        try {
             $delete = $this->pemiluRepositories->statusAndDelete($pemiluID, $request->_method);
-            if(!$delete){
+            if (!$delete) {
                 return redirect()->back()->withErrors('Tidak Dapat Update Pengguna Sudah Memilih');
             }
             return redirect('admin/pemilu')->with('status', 'Data pemilu berhasil dihapus');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
@@ -162,8 +171,8 @@ class AdminController extends Controller
     public function storePemilih(PemilihRequest $request, $pemiluID)
     {
         $data = $request->validated();
-        $store = $this->pemilihRepositories->store($data, Crypt::decrypt($pemiluID), $this->generateUuid());
-        if(!$store){
+        $store = $this->pemilihRepositories->store($data, Crypt::decrypt($pemiluID));
+        if (!$store) {
             return redirect()->back()->withErrors($store);
         }
         return redirect()->back()->with('status', 'Data pemilih berhasil dibuat');
@@ -172,7 +181,7 @@ class AdminController extends Controller
     public function deletePemilih($pemilihID)
     {
         $delete = $this->pemilihRepositories->delete(Crypt::decrypt($pemilihID));
-        if(!$delete){
+        if (!$delete) {
             return redirect()->back()->withErrors($delete);
         }
         return redirect()->back()->with('status', 'Data pemilih berhasil dihapus');
@@ -180,7 +189,7 @@ class AdminController extends Controller
 
     public function hasilPemilu($pemiluID)
     {
-        $pemilu = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function($e){
+        $pemilu = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
             $e->where('status', 'voted');
         }])->findOrFail(Crypt::decrypt($pemiluID));
         return view('admin.hasil', compact('pemilu'));

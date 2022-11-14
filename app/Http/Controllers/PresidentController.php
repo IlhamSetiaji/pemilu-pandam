@@ -18,26 +18,30 @@ class PresidentController extends Controller
         $this->fileRepositories =  $fileRepositories;
     }
 
-    public function listPemilu(){
+    public function listPemilu()
+    {
         $data = Pemilu::withCount('president')->where('status', 'ACTIVE')->get();
         return view('admin.president.index', compact('data'));
     }
 
-    public function listPresident($id){
+    public function listPresident($id)
+    {
         $data = Pemilu::with('president')->findOrFail(Crypt::decrypt($id));
         return view('admin.president.listPresident', compact('data'));
     }
 
-    public function create($id){
+    public function create($id)
+    {
         return view('admin.president.create', compact('id'));
     }
 
-    public function store(ParlemenRequest $request, $id){
+    public function store(ParlemenRequest $request, $id)
+    {
         $request->validated();
 
         $data = Pemilu::findOrFail(Crypt::decrypt($id));
 
-        if(Carbon::now()->gte($data->start_date)){
+        if (Carbon::now()->gte($data->start_date)) {
             return redirect()->back()->withErrors("Tidak Dapat Menambahkan Calon President, Pemilu Sudah Dimulai");
         }
 
@@ -53,28 +57,30 @@ class PresidentController extends Controller
         return redirect()->back()->with('status', 'Data Calon President Berhasil Ditambahkan');
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $data = PresidentModel::with('pemilu')->findOrFail(Crypt::decrypt($id));
         $pemilu = Pemilu::where('status', 'ACTIVE')->get();
 
-        if(Carbon::now()->gte($data->pemilu->start_date)){
+        if (Carbon::now()->gte($data->pemilu->start_date)) {
             return redirect()->back()->withErrors("Tidak Dapat Edit Calon President, Pemilu Sudah Dimulai");
         }
 
         return view('admin.president.edit', compact('data', 'pemilu', 'id'));
     }
 
-    public function update(ParlemenRequest $request, $id){
+    public function update(ParlemenRequest $request, $id)
+    {
         $request->validated();
 
         $data = PresidentModel::with('pemilu')->findOrFail(Crypt::decrypt($id));
 
-        if(Carbon::now()->gte($data->pemilu->start_date)){
+        if (Carbon::now()->gte($data->pemilu->start_date)) {
             return redirect()->back()->withErrors("Tidak Dapat Edit Calon President, Pemilu Sudah Dimulai");
         }
 
         $file = $data->photo;
-        if($request->hasFile('photo')){
+        if ($request->hasFile('photo')) {
             $file = $this->fileRepositories->updateFile($request->file('photo'), $data->photo, 'data_president');
         }
 
@@ -86,13 +92,14 @@ class PresidentController extends Controller
             'photo' => $file
         ]);
 
-        return redirect('admin/president/'.Crypt::encrypt($data->pemilu->id).'/list');
+        return redirect('admin/president/' . Crypt::encrypt($data->pemilu->id) . '/list');
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $data = PresidentModel::with('pemilu')->findOrFail(Crypt::decrypt($id));
 
-        if(Carbon::now()->gte($data->pemilu->start_date)){
+        if (Carbon::now()->gte($data->pemilu->start_date)) {
             return redirect()->back()->withErrors("Tidak Dapat Edit Calon President, Pemilu Sudah Dimulai");
         }
 

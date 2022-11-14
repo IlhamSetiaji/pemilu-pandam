@@ -27,11 +27,11 @@ class ParlemenRequest extends FormRequest
             'name' => 'required',
             'visi' => 'required|min:60',
             'misi' => 'required|min:60',
-            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:10240'
         ];
 
-        if(request('_method') == 'PUT'){
-            $data['photo'] = 'sometimes|image|mimes:jpg,png,jpeg,gif,svg|max:2048';
+        if (request('_method') == 'PUT') {
+            $data['photo'] = 'sometimes|image|mimes:jpg,png,jpeg,gif,svg|max:10240';
         }
 
         return $data;

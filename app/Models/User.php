@@ -50,10 +50,10 @@ class User extends Authenticatable
 
         static::created(function ($model) {
             if ($model->name == null) {
-                $model->name .= 'VOKASI-' . str_pad($model->id, 5, 0, STR_PAD_LEFT);
+                $model->name .= 'VOKASI-' . str_pad($model->id - 1, 5, 0, STR_PAD_LEFT);
             }
             if ($model->username == null) {
-                $model->username .= 'VU'.str_pad($model->id, 5, 0, STR_PAD_LEFT);
+                $model->username .= 'VU' . str_pad($model->id - 1, 5, 0, STR_PAD_LEFT);
             }
             $model->save();
         });
@@ -63,7 +63,8 @@ class User extends Authenticatable
     //     return $this->belongsToMany(User::class, 'pemilih_osis', 'user_id', 'osis_id')->withTimestamps();
     // }
 
-    public function profile(){
+    public function profile()
+    {
         return $this->hasOne(Profile::class, 'user_id');
     }
 }
