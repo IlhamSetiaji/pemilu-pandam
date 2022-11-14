@@ -1,24 +1,29 @@
 <?php
+
 namespace App\Repositories;
 
 use Exception;
 use App\Models\User;
 use App\Models\Pemilu;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-class PemilihRepositories{
-    public function show($pemiluId){
+class PemilihRepositories
+{
+    public function show($pemiluId)
+    {
         $data = Pemilu::with('pemilih.user', 'pemilih.dapil', 'dapil')->findOrFail($pemiluId);
         return $data;
     }
 
-    public function store($data, $pemiluID, $password){
+    public function store($data, $pemiluID)
+    {
         DB::beginTransaction();
-        try{
+        try {
             for ($i = 0; $i < $data['jumlah']; $i++) {
                 $user = User::create([
                     'pemilu_id' => $pemiluID,
-                    'password' => $password,
+                    'password' => $this->generateUuid(),
                 ]);
                 $user->profile()->create([
                     'pemilu_id' => $pemiluID,
@@ -28,19 +33,26 @@ class PemilihRepositories{
             }
             DB::commit();
             return true;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             DB::rollBack();
             return $e->getMessage();
         }
     }
 
-    public function delete($pemilihId){
-        try{
+    public function delete($pemilihId)
+    {
+        try {
             User::findOrFail($pemilihId)->delete();
             return true;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }
+
+    public function generateUuid()
+    {
+        $uuid = Str::uuid()->toString();
+        $pass = str_replace('-', '', $uuid);
+        return $pass;
+    }
 }
-?>
