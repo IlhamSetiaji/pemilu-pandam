@@ -43,7 +43,9 @@
                     <div class="section-body">
                         <div class="card-body p-0">
                             <a class="btn btn-primary" href="#" data-toggle="modal"
-                                data-target="#modalCreateData">Tambah Data Pemilih</a></br></br>
+                                data-target="#modalCreateData">Tambah Data Pemilih</a>
+                            <a href="{{url('admin/'.$data->id.'/print')}}" class="btn btn-info">Cetak Data</a>
+                            </br></br>
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">
                                     <thead>

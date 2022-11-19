@@ -4,21 +4,17 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Osis;
-use App\Models\User;
 use App\Models\Pemilu;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\KetuaRequest;
 use App\Http\Requests\PemiluRequest;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\PemilihRequest;
-use App\Models\VoteModel;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\PemiluRepositories;
 use App\Repositories\PemilihRepositories;
+use PDF;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -29,12 +25,6 @@ class AdminController extends Controller
     {
         $this->pemiluRepositories = $pemiluRepositories;
         $this->pemilihRepositories = $pemilihRepositories;
-    }
-
-    public function generate_password()
-    {
-        $password = "SV".Str::random(6);
-        return $password;
     }
 
     public function index()
@@ -169,6 +159,19 @@ class AdminController extends Controller
     {
         $data = $this->pemilihRepositories->show(Crypt::decrypt($pemiluID));
         return view('admin.pemilih', compact('data', 'pemiluID'));
+    }
+
+    public function printUsers($pemiluID){
+        $data = Pemilu::with('pemilih.dapil')->findOrFail($pemiluID);
+
+        $pdf = PDF::loadView('admin.pdf.pemilih', [
+            'data' => $data,
+            'date' => Carbon::now()
+        ]);
+
+        $pdf->setOption('enable-local-file-access', true);
+
+        return $pdf->stream();
     }
 
     public function storePemilih(PemilihRequest $request, $pemiluID)
