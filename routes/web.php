@@ -46,8 +46,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/{pemiluID}/pemilih', [AdminController::class, 'storePemilih']);
             Route::delete('pemilih/{pemilihID}/delete', [AdminController::class, 'deletePemilih']);
 
-            Route::get('/{pemiluID}/hasil', [AdminController::class, 'hasilPemilu']);
-            Route::get('/{pemiluID}/latest-pemilu', [AdminController::class, 'latestPemilu']);
+            Route::get('{pemiluID}/hasil', [AdminController::class, 'hasilPemilu']);
+            Route::get('{pemiluID}/latest-pemilu', [AdminController::class, 'latestPemilu']);
 
             Route::prefix('dapil')->group(function () {
                 Route::get('/', [DapilController::class, 'index']);

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Exception;
 use App\Models\User;
 use App\Models\Pemilu;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +24,7 @@ class PemilihRepositories
             for ($i = 0; $i < $data['jumlah']; $i++) {
                 $user = User::create([
                     'pemilu_id' => $pemiluID,
-                    'password' => $this->generateUuid(),
+                    'password' => "D".$data['dapil']."P".$pemiluID.Str::random(3).Carbon::now()->format('H').Carbon::now()->format('s'),
                 ]);
                 $user->profile()->create([
                     'pemilu_id' => $pemiluID,

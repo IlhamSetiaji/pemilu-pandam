@@ -33,34 +33,16 @@ class AdminController extends Controller
 
     public function generate_password()
     {
-        list($usec, $sec) = explode(" ", microtime());
-        $microtime = $sec . $usec;
-        $microtime = str_replace(array(',', '.'), array('', ''), $microtime);
-        $microtime = substr_replace($microtime, rand(10000, 99999), -2);
-        $password = substr($microtime, 0, 6) . Str::random(5);
+        $password = "SV".Str::random(6);
         return $password;
     }
 
     public function index()
     {
-        // $presidentResults = VoteModel::
-        $pemilu = Pemilu::where('status', 'ACTIVE')->where('end_date', '>', Carbon::now())->latest('id')->first();
-        // return $pemilu;
+        $pemilu = Pemilu::with('pemilih')->where('status', 'ACTIVE')->where('end_date', '>', Carbon::now())->get();
         $endDate = Carbon::parse(Pemilu::latest('id')->first()->end_date)->format('M j, Y h:i:s');
-        $result = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
-            $e->where('status', 'voted');
-        }])->latest('id')->first();
-        $president = array();
-        $count = array();
-        foreach ($result->president as $value) {
-            array_push($count, $value->votes->count());
-            array_push($president, $value->name);
-        }
-        $encryptedID = Crypt::encrypt($pemilu->id);
-        $url = url('/') . '/admin/' . $encryptedID . '/latest-pemilu';
 
-        // return $url;
-        return view('admin.admin', compact('pemilu', 'endDate', 'president', 'count', 'result', 'url'));
+        return view('admin.admin', compact('pemilu', 'endDate'));
     }
 
     public function latestPemilu($pemiluID)

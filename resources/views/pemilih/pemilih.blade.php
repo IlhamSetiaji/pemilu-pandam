@@ -140,7 +140,9 @@
                             </div>
                         </form>
                         @else
-                        <h2>Anda Sudah Melakukan Vote</h2>
+                        <div class="alert alert-success" role="alert">
+                            Anda sudah memilih, semoga pilihan anda dapat membawa sv lebih baik lagi
+                        </div>
                         @endif
                         <!-- This is where your code ends -->
                     </div>
