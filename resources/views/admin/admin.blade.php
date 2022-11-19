@@ -16,51 +16,58 @@
             <div class="main-content">
                 <section class="section">
                     <div class="section-header">
-                        <h1>Admin Page</h1>
+                        <h1>
+                            Dashboard Utama
+                        </h1>
                     </div>
                     <div class="section-body">
                         <h2 class="section-title">Hi, {{ auth()->user()->name }}</h2>
                         <p class="section-lead">
-                            Welcome to admin page
+                            Selamat Datang di Halaman Admin
                         </p>
-                        @if (!$pemilu)
-                            <div class="row">
-                                <div class="col-12 mb-4">
-                                    <div class="hero text-white hero-bg-image hero-bg-parallax"
-                                        data-background="{{ asset('Stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg') }}">
-                                        <div class="hero-inner">
-                                            <h2>Countdown Pemilu</h2>
-                                            <p class="lead">Sepertinya hasil dari pemilu belum bisa ditampilkan karena
-                                                waktu pemilu belum berakhir</p>
-                                            <div class="mt-4">
-                                                <a href="#"
-                                                    class="btn btn-outline-white btn-lg btn-icon icon-left"><i
-                                                        class="fas fa-stopwatch"></i>
-                                                    <p id="demo"></p>
-                                                </a>
+                        <div class="row mb-4 p-3">
+                            @forelse ($pemilu as $pemilu)
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>{{$pemilu->name}}</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="empty-state">
+                                            <div class="container">
+                                                <img src="https://www.niaga.asia/wp-content/uploads/2019/12/kpu_-_okezone_news_0-1.jpg"
+                                                    class="img-fluid" alt="{{$pemilu->name}}">
                                             </div>
+                                            <h2>Jumlah Pemilih</h2>
+                                            <p class="lead">
+                                                {{ $pemilu->pemilih->count() }}
+                                            </p>
+                                            <h2>Hak Suara yang Digunakan</h2>
+                                            <p class="lead">
+                                                {{ $pemilu->pemilih->where('status', 'voted')->count() }}
+                                            </p>
                                         </div>
+                                        <center>
+                                        <button class="btn btn-info mb-4" id="start_call" data-pemilu="{{Crypt::encrypt($pemilu->id)}}">Hasil
+                                            "{{$pemilu->name}}"</button>
+                                        </center>
                                     </div>
                                 </div>
                             </div>
-                        @else
-                            {{-- <canvas id="myChart" width="100" height="100"></canvas> --}}
-                            <div class="row">
-                                <div class="col-12 mt-4">
-                                    <button class="btn btn-info" id='start_call'>Lihat Hasil Pemilu</button>
-                                    <div id='loading'></div>
-                                </div>
+                        @empty
+                            <div class="alert alert-warning" role="alert">
+                                Anda Belum Memiliki Data Pemilu
                             </div>
-                        @endif
-
-                        <!-- This is where your code ends -->
+                        @endforelse
                     </div>
-                </section>
+                    <div id='loading'></div>
             </div>
-            <footer class="main-footer">
-                @include('stisla.footer')
-            </footer>
+            </section>
         </div>
+        <footer class="main-footer">
+            @include('stisla.footer')
+        </footer>
+    </div>
     </div>
 
     @include('stisla.script')
@@ -70,7 +77,7 @@
         var countDownDate = new Date("<?php echo $endDate; ?>").getTime();
 
         // Update the count down every 1 second
-        var x = setInterval(function() {
+        var x = setInterval(function () {
 
             // Get today's date and time
             var now = new Date().getTime();
@@ -94,23 +101,35 @@
                 document.getElementById("demo").innerHTML = "EXPIRED";
             }
         }, 1000);
+
     </script>
     <script>
         /*This makes the timeout variable global so all functions can access it.*/
         var timeout;
-        var url = <?php echo json_encode($url); ?>
+        var url = {!! json_encode(url('admin')) !!}
 
         /*This is an example function and can be disregarded
         This function sets the loading div to a given string.*/
-        function loaded() {
-            window.location.replace(url);
+        function loaded(pemilu) {
+            window.location.replace(url + "/" + pemilu + "/latest-pemilu");
         }
 
-        function startLoad() {
+        function startLoad(pemilu) {
             /*This is the loading gif, It will popup as soon as startLoad is called*/
             $('#loading').html(
-                '<img style="width: 800px;" src="https://i.pinimg.com/originals/56/b9/af/56b9af0fd3c116c9333cd87f1c731658.gif"/>'
+                '<img style="width: 100%;" src="https://i.pinimg.com/originals/56/b9/af/56b9af0fd3c116c9333cd87f1c731658.gif"/>'
             );
+
+            var target = $('#loading');
+            if (target.length) {
+                $('html,body').animate({
+                    scrollTop: target.offset().top
+                }, 500);
+                clearTimeout(timeout);
+                timeout = setTimeout(function () {
+                    loaded(pemilu);
+                }, 10000);
+            }
             /*
             This is an example of the ajax get method,
             You would retrieve the html then use the results
@@ -123,14 +142,16 @@
             /*This is an example and can be disregarded
             The clearTimeout makes sure you don't overload the timeout variable
             with multiple timout sessions.*/
-            clearTimeout(timeout);
+
             /*Set timeout delays a given function for given milliseconds*/
-            timeout = setTimeout(loaded, 10000);
         }
         /*This binds a click event to the refresh button*/
-        $('#start_call').click(startLoad);
+        $('#start_call').on('click', function () {
+            startLoad($(this).data('pemilu'));
+        });
         /*This starts the load on page load, so you don't have to click the button*/
         // startLoad();
+
     </script>
 </body>
 
