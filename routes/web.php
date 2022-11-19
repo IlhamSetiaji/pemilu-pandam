@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/{pemiluID}/pemilih', [AdminController::class, 'storePemilih']);
             Route::delete('pemilih/{pemilihID}/delete', [AdminController::class, 'deletePemilih']);
 
+            Route::get('{pemiluId}/print', [AdminController::class, 'printUsers']);
+
             Route::get('{pemiluID}/hasil', [AdminController::class, 'hasilPemilu']);
             Route::get('{pemiluID}/latest-pemilu', [AdminController::class, 'latestPemilu']);
 
