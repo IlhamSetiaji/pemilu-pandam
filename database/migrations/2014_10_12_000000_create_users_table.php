@@ -17,11 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('username')->unique()->nullable();
-            $table->string('email')->unique()->nullable();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('status',['SUDAH','BELUM'])->default('BELUM');
-            $table->rememberToken();
             $table->timestamps();
         });
     }

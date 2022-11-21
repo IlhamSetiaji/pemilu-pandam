@@ -111,7 +111,7 @@
         /*This is an example function and can be disregarded
         This function sets the loading div to a given string.*/
         function loaded(pemilu) {
-            window.location.replace(url + "/" + pemilu + "/latest-pemilu");
+            window.location.replace(url + "/" + pemilu + "/hasil");
         }
 
         function startLoad(pemilu) {

@@ -10,6 +10,7 @@ use App\Http\Requests\KetuaRequest;
 use App\Http\Requests\PemiluRequest;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\PemilihRequest;
+use App\Models\DapilModel;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\PemiluRepositories;
 use App\Repositories\PemilihRepositories;
@@ -195,9 +196,15 @@ class AdminController extends Controller
 
     public function hasilPemilu($pemiluID)
     {
-        $pemilu = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
-            $e->where('status', 'voted');
-        }])->findOrFail(Crypt::decrypt($pemiluID));
-        return view('admin.hasil', compact('pemilu'));
+        $pemilu = Pemilu::withCount('dapil')->with('dapil', 'president.votes')->findOrFail(Crypt::decrypt($pemiluID));
+        $col = 12/($pemilu->dapil_count);
+        return view('admin.hasil', compact('pemilu', 'col'));
+    }
+
+    public function hasilPemiluDapil($dapilId){
+        $dapil = DapilModel::with('parlement.votes', 'pemilih')->findOrFail(Crypt::decrypt($dapilId));
+        $all = DapilModel::all();
+        $col = 12/($all->count() - 1);
+        return view('admin.hasil-parlement', compact('dapil', 'all', 'col'));
     }
 }

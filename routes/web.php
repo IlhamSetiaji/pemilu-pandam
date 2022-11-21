@@ -19,7 +19,8 @@ use App\Http\Controllers\PresidentController;
 |
 */
 
-Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::group(['middleware' => 'ipcheck'], function(){
+    Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'storeLogin']);
 
 Route::middleware('auth')->group(function () {
@@ -49,6 +50,7 @@ Route::middleware('auth')->group(function () {
             Route::get('{pemiluId}/print', [AdminController::class, 'printUsers']);
 
             Route::get('{pemiluID}/hasil', [AdminController::class, 'hasilPemilu']);
+            Route::get('{dapilID}/hasil/dapil', [AdminController::class, 'hasilPemiluDapil']);
             Route::get('{pemiluID}/latest-pemilu', [AdminController::class, 'latestPemilu']);
 
             Route::prefix('dapil')->group(function () {
@@ -78,4 +80,5 @@ Route::middleware('auth')->group(function () {
             });
         });
     });
+});
 });

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('profile_id')->constrained('profile')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('parlement_id')->constrained('parlement')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('president_id')->constrained('president')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('ip', 100)->nullable();
             $table->timestamps();
         });
     }
