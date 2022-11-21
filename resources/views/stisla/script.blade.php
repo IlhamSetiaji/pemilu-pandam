@@ -13,7 +13,7 @@
 <script src="{{ asset('Stisla/assets/js/stisla.js') }}"></script>
 
 <!-- JS Libraies -->
-<script src="{{ asset('Stisla/node_modules/cleave.js/dist/cleave.min.js') }}"></script>
+{{-- <script src="{{ asset('Stisla/node_modules/cleave.js/dist/cleave.min.js') }}"></script>
 <script src="{{ asset('Stisla/node_modules/cleave.js/dist/addons/cleave-phone.us.js') }}"></script>
 <script src="{{ asset('Stisla/node_modules/jquery-pwstrength/jquery.pwstrength.min.js') }}"></script>
 <script src="{{ asset('Stisla/node_modules/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
@@ -25,7 +25,7 @@
 <script src="{{ asset('Stisla/node_modules/summernote/dist/summernote-bs4.js') }}"></script>
 <script src="{{ asset('Stisla/node_modules/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('Stisla/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('Stisla/node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('Stisla/node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js') }}"></script> --}}
 <script src="{{ asset('Stisla/node_modules/chart.js/dist/Chart.min.js') }}"></script>
 
 <!-- Template JS File -->

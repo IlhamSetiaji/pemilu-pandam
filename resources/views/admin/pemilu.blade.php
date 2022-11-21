@@ -83,14 +83,15 @@
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     @if ($p->status == 'ACTIVE')
-                                                    <a href="{{ url('admin/'.Crypt::encrypt($p->id).'/hasil') }}"
-                                                        class="btn btn-outline-success mr-2">Hasil</a>
+                                                    <a href="{{ url('admin/'.Crypt::encrypt($p->id).'/hasil') }}"><button class="btn btn-outline-success mr-2" type="button">Hasil</button></a>
                                                     <a href="{{ url('admin/'.Crypt::encrypt($p->id).'/pemilih') }}"
-                                                        class="btn btn-success mr-2">Lihat Pemilih</a>
+                                                        >
+                                                        <button class="btn btn-success mr-2" type="button">Pemilih</button>
+                                                    </a>
                                                     @endif
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#modalUpdateStatus{{ $p->id }}">
-                                                        <button type="button" class="btn btn-info mr-2">Ubah Status</button>
+                                                        <button type="button" class="btn btn-info mr-2">Status</button>
                                                     </a>
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#modalUpdateData{{ $p->id }}">

@@ -1,10 +1,10 @@
 <div class="main-sidebar">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="#">Pemilu</a>
+            <a href="#">Sekolah Vokasi UNS</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="#">PM</a>
+            <a href="#">SV</a>
         </div>
         <ul class="sidebar-menu">
             @if (auth()->user()->hasRole('admin'))
