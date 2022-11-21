@@ -75,7 +75,7 @@
                                                 {{$p->misi}}
                                             </td>
                                             <td>
-                                                <img src="{{url('storage/'.$p->photo)}}" alt="Foto Caleg" width="70px">
+                                                <img src="{{url('storage/public/'.$p->photo)}}" alt="Foto Caleg" width="70px">
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">

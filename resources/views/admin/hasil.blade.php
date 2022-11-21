@@ -54,7 +54,7 @@
                                     <div class="card-body">
                                         <div class="empty-state">
                                             <div class="container">
-                                                <img src="{{url('storage/'.$president->photo)}}" class="img-fluid"
+                                                <img src="{{url('storage/public/'.$president->photo)}}" class="img-fluid"
                                                     alt="{{$president->name}}">
                                             </div>
                                             <h2>Visi</h2>
@@ -94,7 +94,7 @@
                                     <div class="card-body">
                                         <div class="empty-state">
                                             <div class="container">
-                                                <img src="{{url('storage/'.$parlement->photo)}}" class="img-fluid" alt="{{$president->name}}">
+                                                <img src="{{url('storage/public/'.$parlement->photo)}}" class="img-fluid" alt="{{$president->name}}">
                                             </div>
                                             <h2>Jumlah Suara</h2>
                                             <a href="#" class="btn btn-primary mt-4">{{ $parlement->votes->count() }}</a>
