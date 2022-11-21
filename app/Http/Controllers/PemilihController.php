@@ -30,6 +30,7 @@ class PemilihController extends Controller
                 'pemilu_id' => $vote->profile->pemilu->id,
                 'parlement_id' => $request->parlement,
                 'president_id' => $request->president,
+                'ip' => $request->getClientIp()
             ]);
             $vote->profile()->update([
                 'status' => 'voted'
