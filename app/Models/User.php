@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -66,5 +67,13 @@ class User extends Authenticatable
     public function profile()
     {
         return $this->hasOne(Profile::class, 'user_id');
+    }
+
+    public function scopeGetUserProfileDapil($query)
+    {
+        $query = DB::select("SELECT b.* FROM users a
+        JOIN profile b ON a.id = b.user_id
+        JOIN dapil c ON c.id = b.dapil_id");
+        return $query;
     }
 }

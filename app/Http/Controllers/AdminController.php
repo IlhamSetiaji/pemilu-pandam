@@ -13,6 +13,7 @@ use App\Http\Requests\KetuaRequest;
 use App\Http\Requests\PemiluRequest;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\PemilihRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Crypt;
 // use PDF;
 use App\Repositories\PemiluRepositories;
@@ -228,5 +229,12 @@ class AdminController extends Controller
         $all = DapilModel::all();
         $col = 12 / ($all->count() - 1);
         return view('admin.hasil-parlement', compact('dapil', 'all', 'col'));
+    }
+
+    public function getUserProfileDapil()
+    {
+        // $users = User::getUserProfileDapil();
+        $users = User::with('profile', 'profile.dapil')->get();
+        return $users;
     }
 }
