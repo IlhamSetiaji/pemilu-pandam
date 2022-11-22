@@ -16,26 +16,26 @@
             <div class="main-content">
                 <section class="section">
                     @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                    <div class="alert alert-warning alert-dismissible show fade">
-                        <div class="alert-body">
-                            <button class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                            {{ $error }}
-                        </div>
-                    </div>
-                    @endforeach
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-warning alert-dismissible show fade">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>&times;</span>
+                                    </button>
+                                    {{ $error }}
+                                </div>
+                            </div>
+                        @endforeach
                     @endif
                     @if (session('status'))
-                    <div class="alert alert-info alert-dismissible show fade">
-                        <div class="alert-body">
-                            <button class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                            {{ session('status') }}
+                        <div class="alert alert-info alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                {{ session('status') }}
+                            </div>
                         </div>
-                    </div>
                     @endif
                     <div class="section-header">
                         <h1>Halaman Data Calon Legislatif</h1>
@@ -43,14 +43,14 @@
                     <div class="section-body">
                         <div class="card-body p-0">
                             <div class="container">
-                                <form action="{{url('admin/parlement/'.Crypt::encrypt($data->id).'/update')}}"
-                                    method="POST" enctype="multipart/form-data">
+                                <form action="{{ url('admin/parlement/' . Crypt::encrypt($data->id) . '/update') }}"
+                                    method="POST" enctype="multipart/form-data" novalidate>
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group">
                                         <label for="">Nama Calon Legislatif</label>
-                                        <input type="text" class="form-control" value="{{$data->name}}" name="name"
-                                            required>
+                                        <input type="text" class="form-control" value="{{ $data->name }}"
+                                            name="name" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="">Foto Calon Legislatif</label>
@@ -61,21 +61,19 @@
                                         <select class="form-control" name="dapil_id" id="exampleFormControlSelect1">
                                             <option value="">Pilih Dapil</option>
                                             @foreach ($dapil as $dapil)
-                                            <option value="{{$dapil->id}}" @if ($dapil->id == $data->dapil_id)
-                                                selected
-                                            @endif>{{$dapil->name}}</option>
+                                                <option value="{{ $dapil->id }}"
+                                                    @if ($dapil->id == $data->dapil_id) selected @endif>
+                                                    {{ $dapil->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="">Visi</label>
-                                        <textarea name="visi" id="" cols="30" rows="10" class="form-control"
-                                            required>{{$data->visi}}</textarea>
+                                        <textarea name="visi" id="editor-visi" cols="30" rows="10" class="form-control" required>{{ $data->visi }}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="">Misi</label>
-                                        <textarea name="misi" id="" cols="30" rows="10" class="form-control"
-                                            required>{{$data->misi}}</textarea>
+                                        <textarea name="misi" id="editor-misi" cols="30" rows="10" class="form-control" required>{{ $data->misi }}</textarea>
                                     </div>
                                     <button type="submit" class="btn btn-success">Simpan</button>
                                 </form>
@@ -90,6 +88,24 @@
         </div>
     </div>
     @include('stisla.script')
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor-visi'))
+            .then(editor => {
+                console.log(editor);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#editor-misi'))
+            .then(editor => {
+                console.log(editor);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 </body>
 
 </html>

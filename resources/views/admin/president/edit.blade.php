@@ -16,26 +16,26 @@
             <div class="main-content">
                 <section class="section">
                     @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                    <div class="alert alert-warning alert-dismissible show fade">
-                        <div class="alert-body">
-                            <button class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                            {{ $error }}
-                        </div>
-                    </div>
-                    @endforeach
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-warning alert-dismissible show fade">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>&times;</span>
+                                    </button>
+                                    {{ $error }}
+                                </div>
+                            </div>
+                        @endforeach
                     @endif
                     @if (session('status'))
-                    <div class="alert alert-info alert-dismissible show fade">
-                        <div class="alert-body">
-                            <button class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                            {{ session('status') }}
+                        <div class="alert alert-info alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                {{ session('status') }}
+                            </div>
                         </div>
-                    </div>
                     @endif
                     <div class="section-header">
                         <h1>Halaman Edit Calon President</h1>
@@ -43,12 +43,14 @@
                     <div class="section-body">
                         <div class="card-body p-0">
                             <div class="container">
-                                <form action="{{url('admin/president/'.$id.'/edit')}}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ url('admin/president/' . $id . '/edit') }}" method="POST"
+                                    enctype="multipart/form-data" novalidate>
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group">
                                         <label for="">Nama Calon President</label>
-                                        <input type="text" class="form-control" value="{{$data->name}}" name="name" required>
+                                        <input type="text" class="form-control" value="{{ $data->name }}"
+                                            name="name" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="">Foto Calon President</label>
@@ -56,20 +58,21 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="">Visi</label>
-                                        <textarea name="visi" id="" cols="30" rows="10" class="form-control" required>{{$data->visi}}</textarea>
+                                        <textarea name="visi" id="editor-visi" cols="30" rows="10" class="form-control" required>{{ $data->visi }}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="">Misi</label>
-                                        <textarea name="misi" id="" cols="30" rows="10" class="form-control" required>{{$data->misi}}</textarea>
+                                        <textarea name="misi" id="editor-misi" cols="30" rows="10" class="form-control" required>{{ $data->misi }}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleFormControlSelect1">Assign Pemilu</label>
-                                        <select class="form-control" name="pemilu_id" id="exampleFormControlSelect1" required>
+                                        <select class="form-control" name="pemilu_id" id="exampleFormControlSelect1"
+                                            required>
                                             <option value="">Pilih Pemilu</option>
                                             @foreach ($pemilu as $pemilu)
-                                            <option value="{{$pemilu->id}}" @if ($pemilu->id == $data->pemilu_id)
-                                                selected
-                                            @endif>{{$pemilu->name}}</option>
+                                                <option value="{{ $pemilu->id }}"
+                                                    @if ($pemilu->id == $data->pemilu_id) selected @endif>
+                                                    {{ $pemilu->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -86,5 +89,24 @@
         </div>
     </div>
     @include('stisla.script')
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor-visi'))
+            .then(editor => {
+                console.log(editor);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#editor-misi'))
+            .then(editor => {
+                console.log(editor);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 </body>
+
 </html>

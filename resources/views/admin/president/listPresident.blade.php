@@ -76,7 +76,7 @@
                                                     {{ $p->misi }}
                                                 </td>
                                                 <td>
-                                                    <img src="{{ url('storage/public/' . $p->photo) }}" alt="Foto President"
+                                                    <img src="{{ url('storage/' . $p->photo) }}" alt="Foto President"
                                                         width="70px">
                                                 </td>
                                                 <td>
