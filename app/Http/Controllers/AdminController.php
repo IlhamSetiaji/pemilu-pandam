@@ -45,6 +45,11 @@ class AdminController extends Controller
     {
         // $presidentResults = VoteModel::
         $pemilu = Pemilu::where('status', 'ACTIVE')->where('end_date', '>', Carbon::now())->latest('id')->first();
+        if ($pemilu) {
+            $encryptedID = Crypt::encrypt($pemilu->id);
+        } else {
+            $encryptedID = Crypt::encrypt(1);
+        }
         // return $pemilu;
         $endDate = Carbon::parse(Pemilu::latest('id')->first()->end_date)->format('M j, Y h:i:s');
         $result = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
@@ -56,7 +61,7 @@ class AdminController extends Controller
             array_push($count, $value->votes->count());
             array_push($president, $value->name);
         }
-        $encryptedID = Crypt::encrypt($pemilu->id);
+
         $url = url('/') . '/admin/' . $encryptedID . '/latest-pemilu';
 
         // return $url;
