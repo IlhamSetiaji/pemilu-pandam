@@ -207,4 +207,8 @@ class AdminController extends Controller
         $col = 12/($all->count() - 1);
         return view('admin.hasil-parlement', compact('dapil', 'all', 'col'));
     }
+
+    public function getIP(Request $request){
+        dd($request->getClientIp());
+    }
 }

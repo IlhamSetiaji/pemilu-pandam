@@ -19,8 +19,10 @@ use App\Http\Controllers\PresidentController;
 |
 */
 
+Route::get('ip', [AdminController::class, 'getIp']);
+
 // Route::group(['middleware' => 'ipcheck'], function(){
-    Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'storeLogin']);
 
 Route::middleware('auth')->group(function () {

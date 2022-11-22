@@ -70,10 +70,10 @@
                                                     {{ $p->name }}
                                                 </td>
                                                 <td>
-                                                    {{ $p->visi }}
+                                                    {!! $p->visi !!}
                                                 </td>
                                                 <td>
-                                                    {{ $p->misi }}
+                                                    {!! $p->misi !!}
                                                 </td>
                                                 <td>
                                                     <img src="{{ url('storage/public/' . $p->photo) }}" alt="Foto President"

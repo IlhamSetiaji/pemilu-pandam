@@ -10,9 +10,9 @@
             </div>
             <div class="modal-body">
                 <b>Visi</b>
-                <p>{{$modalPresident->visi}}</p>
+                <p>{!! $modalPresident->visi !!}</p>
                 <b class="mt-3">Misi</b>
-                <p>{{$modalPresident->misi}}</p>
+                <p>{!! $modalPresident->misi !!}</p>
             </div>
             <div class="modal-footer bg-whitesmoke br">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
