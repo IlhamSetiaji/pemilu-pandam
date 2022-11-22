@@ -49,7 +49,7 @@ class AdminController extends Controller
         // }
 
         // $url = url('/') . '/admin/' . $encryptedID . '/latest-pemilu';
-        $pemilu = Pemilu::with('pemilih')->where('status', 'ACTIVE')->where('end_date', '>', Carbon::now())->get();
+        $pemilu = Pemilu::with('pemilih')->where('status', 'ACTIVE')->where('end_date', '<', Carbon::now())->get();
         $endDate = Carbon::parse(Pemilu::latest('id')->first()->end_date)->format('M j, Y h:i:s');
 
         return view('admin.admin', compact('pemilu', 'endDate'));
