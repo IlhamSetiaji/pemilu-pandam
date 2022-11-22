@@ -3,19 +3,20 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Osis;
 use App\Models\Pemilu;
+use App\Models\DapilModel;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Requests\KetuaRequest;
 use App\Http\Requests\PemiluRequest;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\PemilihRequest;
-use App\Models\DapilModel;
 use Illuminate\Support\Facades\Crypt;
+// use PDF;
 use App\Repositories\PemiluRepositories;
 use App\Repositories\PemilihRepositories;
-use PDF;
-use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -185,14 +186,14 @@ class AdminController extends Controller
     {
         $data = Pemilu::with('pemilih.dapil')->findOrFail($pemiluID);
 
-        $pdf = PDF::loadView('admin.pdf.pemilih', [
+        $pdf = Pdf::loadView('admin.pdf.pemilih', [
             'data' => $data,
             'date' => Carbon::now()
         ]);
 
-        $pdf->setOption('enable-local-file-access', true);
+        // $pdf->setOption('enable-local-file-access', true);
 
-        return $pdf->stream();
+        return $pdf->download('pemilih.pdf');
     }
 
     public function storePemilih(PemilihRequest $request, $pemiluID)
