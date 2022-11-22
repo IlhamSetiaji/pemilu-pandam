@@ -11,7 +11,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="{{ asset('Stisla/assets/js/stisla.js') }}"></script>
-
 <!-- JS Libraies -->
 {{-- <script src="{{ asset('Stisla/node_modules/cleave.js/dist/cleave.min.js') }}"></script>
 <script src="{{ asset('Stisla/node_modules/cleave.js/dist/addons/cleave-phone.us.js') }}"></script>

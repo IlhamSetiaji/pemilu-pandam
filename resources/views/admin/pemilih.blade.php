@@ -44,10 +44,10 @@
                         <div class="card-body p-0">
                             <a class="btn btn-primary" href="#" data-toggle="modal"
                                 data-target="#modalCreateData">Tambah Data Pemilih</a>
-                            <a href="{{url('admin/'.$data->id.'/print')}}" class="btn btn-info">Cetak Data</a>
+                            {{-- <a href="{{url('admin/'.$data->id.'/print')}}" class="btn btn-info btn-disable">Cetak Data</a> --}}
                             </br></br>
-                            <div class="table-responsive">
-                                <table class="table table-striped" id="table-1">
+                            <div class="table-responsive p-3">
+                                <table class="table" id="table">
                                     <thead>
                                         <tr>
                                             <th class="text-center">
@@ -99,7 +99,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- This is where your code ends -->
                         </div>
                         <!-- This is where your code ends -->
                     </div>
@@ -113,6 +112,12 @@
     @include('admin.modal.create-pemilih')
     @include('admin.modal.delete-pemilih')
     @include('stisla.script')
+    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#table').DataTable();
+        });
+    </script>
 </body>
 
 </html>

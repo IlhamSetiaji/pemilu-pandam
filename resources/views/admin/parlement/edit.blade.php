@@ -69,12 +69,12 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="">Visi</label>
-                                        <textarea name="visi" id="" cols="30" rows="10" class="form-control"
+                                        <textarea name="visi" id="visi" cols="30" rows="10" class="form-control"
                                             required>{{$data->visi}}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="">Misi</label>
-                                        <textarea name="misi" id="" cols="30" rows="10" class="form-control"
+                                        <textarea name="misi" id="misi" cols="30" rows="10" class="form-control"
                                             required>{{$data->misi}}</textarea>
                                     </div>
                                     <button type="submit" class="btn btn-success">Simpan</button>
@@ -90,6 +90,7 @@
         </div>
     </div>
     @include('stisla.script')
+    @include('stisla.ckeditor')
 </body>
 
 </html>
