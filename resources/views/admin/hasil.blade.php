@@ -59,11 +59,11 @@
                                             </div>
                                             <h2>Visi</h2>
                                             <p class="lead">
-                                                {{ $president->visi }}
+                                                {!! $president->visi !!}
                                             </p>
                                             <h2>Misi</h2>
                                             <p class="lead">
-                                                {{ $president->misi }}
+                                                {!! $president->misi !!}
                                             </p>
                                             <h2>Jumlah Suara</h2>
                                             <h4 class="counter mt-4 text-dark"
