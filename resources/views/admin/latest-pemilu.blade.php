@@ -62,7 +62,7 @@
                                                         <li class="media">
                                                             <a href="#">
                                                                 <img alt="image" class="mr-3 rounded" width="50"
-                                                                    src="{{ url('storage/' . $value->photo) }}">
+                                                                    src="{{ url('storage/public/' . $value->photo) }}">
                                                             </a>
                                                             <div class="media-body">
                                                                 <div class="media-right">

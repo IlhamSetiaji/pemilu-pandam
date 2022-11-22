@@ -83,7 +83,7 @@
 
                                             <div class="card card-default card-input">
                                                 <div class="card-header">
-                                                    <img src="{{url('storage/'.$president->photo)}}" alt=""
+                                                    <img src="{{url('storage/public/'.$president->photo)}}" alt=""
                                                         width="100%">
                                                 </div>
                                                 <div class="card-body">
@@ -116,7 +116,7 @@
 
                                             <div class="card card-default card-input">
                                                 <div class="card-header">
-                                                    <img src="{{url('storage/'.$parlement->photo)}}" alt="{{$parlement->name}}" width="100%">
+                                                    <img src="{{url('storage/public/'.$parlement->photo)}}" alt="{{$parlement->name}}" width="100%">
                                                 </div>
                                                 <div class="card-body">
                                                     <b>Nama Calon Anggota DEMA</b>
@@ -140,7 +140,9 @@
                             </div>
                         </form>
                         @else
-                        <h2>Anda Sudah Melakukan Vote</h2>
+                        <div class="alert alert-success" role="alert">
+                            Anda sudah memilih, semoga pilihan anda dapat membawa sv lebih baik lagi
+                        </div>
                         @endif
                         <!-- This is where your code ends -->
                     </div>

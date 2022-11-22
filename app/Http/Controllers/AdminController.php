@@ -4,21 +4,18 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Osis;
-use App\Models\User;
 use App\Models\Pemilu;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\KetuaRequest;
 use App\Http\Requests\PemiluRequest;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\PemilihRequest;
-use App\Models\VoteModel;
+use App\Models\DapilModel;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\PemiluRepositories;
 use App\Repositories\PemilihRepositories;
+use PDF;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -31,41 +28,31 @@ class AdminController extends Controller
         $this->pemilihRepositories = $pemilihRepositories;
     }
 
-    public function generate_password()
-    {
-        list($usec, $sec) = explode(" ", microtime());
-        $microtime = $sec . $usec;
-        $microtime = str_replace(array(',', '.'), array('', ''), $microtime);
-        $microtime = substr_replace($microtime, rand(10000, 99999), -2);
-        $password = substr($microtime, 0, 6) . Str::random(5);
-        return $password;
-    }
-
     public function index()
     {
-        // $presidentResults = VoteModel::
-        $pemilu = Pemilu::where('status', 'ACTIVE')->where('end_date', '>', Carbon::now())->latest('id')->first();
-        if ($pemilu) {
-            $encryptedID = Crypt::encrypt($pemilu->id);
-        } else {
-            $encryptedID = Crypt::encrypt(1);
-        }
-        // return $pemilu;
+        // $pemilu = Pemilu::where('status', 'ACTIVE')->where('end_date', '>', Carbon::now())->latest('id')->first();
+        // if ($pemilu) {
+        //     $encryptedID = Crypt::encrypt($pemilu->id);
+        // } else {
+        //     $encryptedID = Crypt::encrypt(1);
+        // }
+        // // return $pemilu;
+        // $endDate = Carbon::parse(Pemilu::latest('id')->first()->end_date)->format('M j, Y h:i:s');
+        // $result = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
+        //     $e->where('status', 'voted');
+        // }])->latest('id')->first();
+        // $president = array();
+        // $count = array();
+        // foreach ($result->president as $value) {
+        //     array_push($count, $value->votes->count());
+        //     array_push($president, $value->name);
+        // }
+
+        // $url = url('/') . '/admin/' . $encryptedID . '/latest-pemilu';
+        $pemilu = Pemilu::with('pemilih')->where('status', 'ACTIVE')->where('end_date', '>', Carbon::now())->get();
         $endDate = Carbon::parse(Pemilu::latest('id')->first()->end_date)->format('M j, Y h:i:s');
-        $result = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
-            $e->where('status', 'voted');
-        }])->latest('id')->first();
-        $president = array();
-        $count = array();
-        foreach ($result->president as $value) {
-            array_push($count, $value->votes->count());
-            array_push($president, $value->name);
-        }
 
-        $url = url('/') . '/admin/' . $encryptedID . '/latest-pemilu';
-
-        // return $url;
-        return view('admin.admin', compact('pemilu', 'endDate', 'president', 'count', 'result', 'url'));
+        return view('admin.admin', compact('pemilu', 'endDate'));
     }
 
     public function latestPemilu($pemiluID)
@@ -194,6 +181,20 @@ class AdminController extends Controller
         return view('admin.pemilih', compact('data', 'pemiluID'));
     }
 
+    public function printUsers($pemiluID)
+    {
+        $data = Pemilu::with('pemilih.dapil')->findOrFail($pemiluID);
+
+        $pdf = PDF::loadView('admin.pdf.pemilih', [
+            'data' => $data,
+            'date' => Carbon::now()
+        ]);
+
+        $pdf->setOption('enable-local-file-access', true);
+
+        return $pdf->stream();
+    }
+
     public function storePemilih(PemilihRequest $request, $pemiluID)
     {
         $data = $request->validated();
@@ -215,9 +216,16 @@ class AdminController extends Controller
 
     public function hasilPemilu($pemiluID)
     {
-        $pemilu = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
-            $e->where('status', 'voted');
-        }])->findOrFail(Crypt::decrypt($pemiluID));
-        return view('admin.hasil', compact('pemilu'));
+        $pemilu = Pemilu::withCount('dapil')->with('dapil', 'president.votes')->findOrFail(Crypt::decrypt($pemiluID));
+        $col = 12 / ($pemilu->dapil_count);
+        return view('admin.hasil', compact('pemilu', 'col'));
+    }
+
+    public function hasilPemiluDapil($dapilId)
+    {
+        $dapil = DapilModel::with('parlement.votes', 'pemilih')->findOrFail(Crypt::decrypt($dapilId));
+        $all = DapilModel::all();
+        $col = 12 / ($all->count() - 1);
+        return view('admin.hasil-parlement', compact('dapil', 'all', 'col'));
     }
 }
