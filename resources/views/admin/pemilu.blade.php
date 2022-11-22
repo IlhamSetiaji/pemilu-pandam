@@ -16,26 +16,26 @@
             <div class="main-content">
                 <section class="section">
                     @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                    <div class="alert alert-warning alert-dismissible show fade">
-                        <div class="alert-body">
-                            <button class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                            {{ $error }}
-                        </div>
-                    </div>
-                    @endforeach
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-warning alert-dismissible show fade">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>&times;</span>
+                                    </button>
+                                    {{ $error }}
+                                </div>
+                            </div>
+                        @endforeach
                     @endif
                     @if (session('status'))
-                    <div class="alert alert-info alert-dismissible show fade">
-                        <div class="alert-body">
-                            <button class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                            {{ session('status') }}
+                        <div class="alert alert-info alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                {{ session('status') }}
+                            </div>
                         </div>
-                    </div>
                     @endif
                     <div class="section-header">
                         <h1>Halaman Data Pemilu</h1>
@@ -60,52 +60,59 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($pemilu as $key => $p)
-                                        <tr>
-                                            <td class="text-center">
-                                                {{ $key+1 }}
-                                            </td>
-                                            <td>
-                                                {{ $p->name }}
-                                            </td>
-                                            <td>
-                                                {{ $p->start_date }}
-                                            </td>
-                                            <td>
-                                                {{ $p->end_date }}
-                                            </td>
-                                            <td>
-                                                @if ($p->status == 'ACTIVE')
-                                                <span class="badge badge-success">Aktif</span>
-                                                @else
-                                                <span class="badge badge-danger">Nonaktif</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                            <tr>
+                                                <td class="text-center">
+                                                    {{ $key + 1 }}
+                                                </td>
+                                                <td>
+                                                    {{ $p->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $p->start_date }}
+                                                </td>
+                                                <td>
+                                                    {{ $p->end_date }}
+                                                </td>
+                                                <td>
                                                     @if ($p->status == 'ACTIVE')
-                                                    <a href="{{ url('admin/'.Crypt::encrypt($p->id).'/hasil') }}"><button class="btn btn-outline-success mr-2" type="button">Hasil</button></a>
-                                                    <a href="{{ url('admin/'.Crypt::encrypt($p->id).'/pemilih') }}"
-                                                        >
-                                                        <button class="btn btn-success mr-2" type="button">Pemilih</button>
-                                                    </a>
+                                                        <span class="badge badge-success">Aktif</span>
+                                                    @else
+                                                        <span class="badge badge-danger">Nonaktif</span>
                                                     @endif
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#modalUpdateStatus{{ $p->id }}">
-                                                        <button type="button" class="btn btn-info mr-2">Status</button>
-                                                    </a>
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#modalUpdateData{{ $p->id }}">
-                                                        <button type="button" class="btn btn-warning mr-2">Edit</button>
-                                                    </a>
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#modalDeleteData{{ $p->id }}">
-                                                        <button type="button" class="btn btn-danger mr-2">Delete</button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                                        @if ($p->status == 'ACTIVE')
+                                                            <a
+                                                                href="{{ url('admin/' . Crypt::encrypt($p->id) . '/hasil') }}"><button
+                                                                    class="btn btn-outline-success mr-2"
+                                                                    type="button">Hasil</button></a>
+                                                            <a
+                                                                href="{{ url('admin/' . Crypt::encrypt($p->id) . '/pemilih') }}">
+                                                                <button class="btn btn-success mr-2"
+                                                                    type="button">Pemilih</button>
+                                                            </a>
+                                                        @endif
+                                                        <a href="#" data-toggle="modal"
+                                                            data-target="#modalUpdateStatus{{ $p->id }}">
+                                                            <button type="button"
+                                                                class="btn btn-info mr-2">Status</button>
+                                                        </a>
+                                                        <a href="#" data-toggle="modal"
+                                                            data-target="#modalUpdateData{{ $p->id }}">
+                                                            <button type="button"
+                                                                class="btn btn-warning mr-2">Edit</button>
+                                                        </a>
+                                                        <a href="#" data-toggle="modal"
+                                                            data-target="#modalDeleteData{{ $p->id }}">
+                                                            <button type="button"
+                                                                class="btn btn-danger mr-2">Delete</button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
-                                    @endforeach
                                 </table>
                             </div>
                         </div>
