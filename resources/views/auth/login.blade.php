@@ -82,8 +82,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom"
-                    style="background-image:url('https://i.ibb.co/RyydrBD/258787631-4501965709891090-2474604461917822680-n.jpg')">
+                <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 position-relative overlay-gradient-bottom"
+                    style="background-image:url('https://i0.wp.com/uns.ac.id/id/wp-content/uploads/Preview.png?w=1171&ssl=1')">
                     <div class="absolute-bottom-left index-2">
                         <div class="text-light p-5 pb-2">
                             <div class="mb-5 pb-3">

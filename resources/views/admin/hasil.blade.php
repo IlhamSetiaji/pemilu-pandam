@@ -57,14 +57,14 @@
                                                 <img src="{{url('storage/public/'.$president->photo)}}"
                                                     class="img-fluid" alt="{{$president->name}}">
                                             </div>
-                                            <h2>Visi</h2>
-                                            <p class="lead">
-                                                {!! $president->visi !!}
-                                            </p>
-                                            <h2>Misi</h2>
-                                            <p class="lead">
-                                                {!! $president->misi !!}
-                                            </p>
+                                            <!--<h2>Visi</h2>-->
+                                            <!--<p class="lead">-->
+                                            <!--    {!! $president->visi !!}-->
+                                            <!--</p>-->
+                                            <!--<h2>Misi</h2>-->
+                                            <!--<p class="lead">-->
+                                            <!--    {!! $president->misi !!}-->
+                                            <!--</p>-->
                                             <h2>Jumlah Suara</h2>
                                             <h4 class="counter mt-4 text-dark"
                                                 data-count="{{$president->votes->count()}}">0</h4>
