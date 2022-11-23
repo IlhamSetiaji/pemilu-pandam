@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('{pemiluID}/hasil', [AdminController::class, 'hasilPemilu']);
             Route::get('{dapilID}/hasil/dapil', [AdminController::class, 'hasilPemiluDapil']);
-            Route::get('{pemiluID}/latest-pemilu', [AdminController::class, 'latestPemilu']);
+            Route::get('{pemiluId}/monitoring', [AdminController::class, 'monitoring']);
 
             Route::prefix('dapil')->group(function () {
                 Route::get('/', [DapilController::class, 'index']);

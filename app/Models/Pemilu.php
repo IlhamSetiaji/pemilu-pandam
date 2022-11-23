@@ -21,11 +21,6 @@ class Pemilu extends Model
         return $this->hasMany(DapilModel::class, 'pemilu_id');
     }
 
-    public function osis()
-    {
-        return $this->hasMany(Osis::class);
-    }
-
     public function president(){
         return $this->hasMany(PresidentModel::class, 'pemilu_id');
     }

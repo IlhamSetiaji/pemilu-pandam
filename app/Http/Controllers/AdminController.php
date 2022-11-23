@@ -36,24 +36,6 @@ class AdminController extends Controller
         return view('admin.admin', compact('pemilu', 'endDate'));
     }
 
-    public function latestPemilu($pemiluID)
-    {
-        $pemilu = Pemilu::find(Crypt::decrypt($pemiluID));
-        if (!$pemilu) {
-            return redirect('/admin')->with('status', 'Pemilu tidak ditemukan');
-        }
-        $result = Pemilu::with(['dapil.parlement.votes', 'president.votes', 'dapil.pemilih' => function ($e) {
-            $e->where('status', 'voted');
-        }])->latest('id')->first();
-        $president = array();
-        $count = array();
-        foreach ($result->president as $value) {
-            array_push($count, $value->votes->count());
-            array_push($president, $value->name);
-        }
-        return view('admin.latest-pemilu', compact('pemilu', 'president', 'count', 'result'));
-    }
-
     public function showAllPemilu()
     {
         $pemilu = $this->pemiluRepositories->getAllData();
@@ -206,6 +188,11 @@ class AdminController extends Controller
         $all = DapilModel::all();
         $col = 12/($all->count() - 1);
         return view('admin.hasil-parlement', compact('dapil', 'all', 'col'));
+    }
+
+    public function monitoring($pemiluId){
+        $data = Pemilu::with(['pemilih', 'dapil.pemilih'])->find(Crypt::decrypt($pemiluId));
+        return view('admin.persebaran', compact('data'));
     }
 
     public function getIP(Request $request){
